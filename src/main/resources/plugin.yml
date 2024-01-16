@@ -1,0 +1,4 @@
+name: CozyWarps
+version: '${project.version}'
+main: com.github.cozyplugins.cozywarps.CozyWarps
+api-version: '1.20'
