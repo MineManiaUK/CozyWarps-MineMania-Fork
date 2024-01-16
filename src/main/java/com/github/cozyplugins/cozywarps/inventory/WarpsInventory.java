@@ -6,6 +6,7 @@ import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozywarps.CozyWarps;
 import com.github.cozyplugins.cozywarps.Warp;
+import com.github.cozyplugins.cozywarps.WarpVisit;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -140,6 +141,13 @@ public class WarpsInventory extends InventoryInterface {
                     warp.teleport(player);
 
                     if (!CozyWarps.getInstance().hasVisited(warp.getIdentifier(), user.getUuid())) {
+
+                        // Add a warp visit to the recent list.
+                        CozyWarps.getInstance().addWarpVisit(
+                                new WarpVisit(warp.getIdentifier(), user.getUuid())
+                        );
+
+                        // Increment the number of times visited.
                         warp.incrementVisits();
                         warp.save();
                     }
