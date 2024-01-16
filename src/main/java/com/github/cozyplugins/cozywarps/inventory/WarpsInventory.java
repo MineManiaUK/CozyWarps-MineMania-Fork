@@ -42,7 +42,10 @@ public class WarpsInventory extends InventoryInterface {
                         "&a/warps &fTo list all warps.",
                         "&a/warps create <name> &fTo create a warp.",
                         "&a/warps delete <name> &fTo delete a warp.",
-                        "&a/warps edit <name> &fTo edit a warp.")
+                        "&a/warps edit <name> &fTo edit a warp.",
+                        "&7",
+                        "&7Visits are counted as every unique player",
+                        "&7visiting your warp every hour.")
                 .addSlot(45, 46, 47)
         );
 
@@ -135,13 +138,17 @@ public class WarpsInventory extends InventoryInterface {
                 item.addAction((ClickAction) (user, type, inventory) -> {
                     player.sendMessage("&7Teleporting to " + warp.getName() + "...");
                     warp.teleport(player);
-                    warp.incrementVisits();
-                    warp.save();
+
+                    if (!CozyWarps.getInstance().hasVisited(warp.getIdentifier(), user.getUuid())) {
+                        warp.incrementVisits();
+                        warp.save();
+                    }
                 });
             }
 
             // Otherwise, add the warp item.
             this.setItem(item);
+            warpNumber++;
         }
 
         return this;

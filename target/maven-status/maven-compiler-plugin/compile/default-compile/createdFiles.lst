@@ -3,3 +3,4 @@ com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.class
 com/github/cozyplugins/cozywarps/Warp.class
 com/github/cozyplugins/cozywarps/CozyWarps.class
 com/github/cozyplugins/cozywarps/command/WarpsCommand.class
+com/github/cozyplugins/cozywarps/indicator/LocationConverter.class

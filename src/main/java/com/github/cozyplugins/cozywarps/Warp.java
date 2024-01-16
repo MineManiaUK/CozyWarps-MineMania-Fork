@@ -329,6 +329,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     public @NotNull ConfigurationSection convert() {
         ConfigurationSection section = new MemoryConfigurationSection(new LinkedHashMap<>());
 
+        section.set("owner", this.ownerUuid.toString());
         section.set("name", this.name);
         section.set("description", this.description);
         section.set("material", this.material.toString());
@@ -342,6 +343,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     @Override
     public @NotNull Warp convert(ConfigurationSection section) {
 
+        this.ownerUuid = UUID.fromString(section.getString("owner"));
         this.name = section.getString("name", "null");
         this.description = section.getString("description");
         this.setMaterialAsString(section.getString("material", "COMPASS"));
@@ -364,6 +366,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
 
     @Override
     public int compareTo(@NotNull Warp warp) {
-        return Integer.compare(this.visits, warp.getVisits());
+        return Integer.compare(warp.getVisits(), this.visits);
     }
 }

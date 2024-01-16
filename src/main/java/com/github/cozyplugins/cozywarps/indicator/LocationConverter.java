@@ -31,8 +31,8 @@ public interface LocationConverter {
         section.set("x", location.getBlockX());
         section.set("y", location.getBlockY());
         section.set("z", location.getBlockZ());
-        section.set("pitch", location.getPitch());
-        section.set("yaw", location.getYaw());
+        section.set("pitch", Float.toString(location.getPitch()));
+        section.set("yaw", Float.toString(location.getYaw()));
 
         if (location.getWorld() == null) return section;
         section.set("world", location.getWorld().getName());
@@ -58,8 +58,8 @@ public interface LocationConverter {
                 section.getDouble("x"),
                 section.getDouble("y"),
                 section.getDouble("z"),
-                Float.valueOf(Double.toString(section.getDouble("pitch"))),
-                Float.valueOf(Double.toString(section.getDouble("yaw")))
+                Float.parseFloat(section.getString("pitch")),
+                Float.parseFloat(section.getString("yaw"))
         );
     }
 }

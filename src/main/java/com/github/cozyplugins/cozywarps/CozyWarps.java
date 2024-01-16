@@ -4,6 +4,7 @@ import com.github.cozyplugins.cozylibrary.CozyPlugin;
 import com.github.cozyplugins.cozywarps.command.WarpsCommand;
 import com.github.smuddgge.squishyconfiguration.ConfigurationFactory;
 import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,11 +17,10 @@ import java.util.UUID;
  */
 public final class CozyWarps extends CozyPlugin {
 
-    private static @SuppressWarnings("all")
-    @NotNull CozyWarps instance;
+    private static @NotNull CozyWarps instance;
 
-    private @SuppressWarnings("all")
-    @NotNull Configuration storage;
+    private @NotNull Configuration storage;
+    private @NotNull List<WarpVisit> warpVisitList = new ArrayList<>();
 
     @Override
     public boolean enableCommandDirectory() {
@@ -29,6 +29,9 @@ public final class CozyWarps extends CozyPlugin {
 
     @Override
     public void onCozyEnable() {
+
+        // Initialise the warp visit list.
+        this.warpVisitList = new ArrayList<>();
 
         // Create the instance of the storage configuration.
         this.storage = ConfigurationFactory.YAML.create(this.getDataFolder(), "storage");
@@ -50,9 +53,7 @@ public final class CozyWarps extends CozyPlugin {
      */
     public @NotNull Optional<Warp> getWarp(@NotNull UUID identifier) {
         if (this.storage.getKeys().contains(identifier.toString())) {
-            return Optional.of(
-                    new Warp(identifier).convert(this.storage.getSection(identifier.toString()))
-            );
+            return Optional.of(new Warp(identifier).convert(this.storage.getSection(identifier.toString())));
         }
 
         return Optional.empty();
@@ -75,6 +76,45 @@ public final class CozyWarps extends CozyPlugin {
     }
 
     /**
+     * Used to add a warp visit to the visit list.
+     *
+     * @param warpVisit The instance of the warp visit.
+     * @return This instance.
+     */
+    public @NotNull CozyWarps addWarpVisit(@NotNull WarpVisit warpVisit) {
+        this.warpVisitList.add(warpVisit);
+        return this;
+    }
+
+    /**
+     * Used to remove all the warp visits registered.
+     *
+     * @return This instance.
+     */
+    public @NotNull CozyWarps removeWarpVisits() {
+        this.warpVisitList = new ArrayList<>();
+        return this;
+    }
+
+    /**
+     * Used to check if the list of visits contains a certain
+     * warp uuid and player uuid.
+     *
+     * @param warpUuid The warp uuid to check.
+     * @param playerUuid The player uuid to check.
+     * @return True if they have visited recently.
+     */
+    public boolean hasVisited(@NotNull UUID warpUuid, @NotNull UUID playerUuid) {
+        for (WarpVisit warpVisit : this.warpVisitList) {
+            if (warpVisit.isWarpUuid(warpUuid)
+                    && warpVisit.isPlayerUuid(playerUuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Used to update or insert a warp in storage.
      *
      * @param warp The instance of the warp to update or insert.
@@ -84,6 +124,21 @@ public final class CozyWarps extends CozyPlugin {
         this.storage.set(warp.getIdentifier().toString(), warp.convert().getMap());
         this.storage.save();
         return this;
+    }
+
+    /**
+     * Used to start the bukkit task of removing
+     * visits every hour.
+     */
+    public void startVisitRemovingTask() {
+
+        // Create the task.
+        Bukkit.getScheduler().runTaskTimer(
+                this,
+                this::removeWarpVisits,
+                72000,
+                72000
+        );
     }
 
     /**
