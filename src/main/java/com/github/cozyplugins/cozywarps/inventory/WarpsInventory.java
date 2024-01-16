@@ -7,9 +7,9 @@ import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozywarps.CozyWarps;
 import com.github.cozyplugins.cozywarps.Warp;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Represents the warp's inventory.
@@ -103,8 +103,11 @@ public class WarpsInventory extends InventoryInterface {
         int startingSlot = this.page * 45;
         int endingSlot = (this.page + 1) * 45;
 
+        List<Warp> list = CozyWarps.getInstance().getAllWarps();
+        list.sort(Warp::compareTo);
+
         // Loop though all the warps.
-        for (Warp warp : CozyWarps.getInstance().getAllWarps()) {
+        for (Warp warp : list) {
 
             // Check if the warp number is smaller than the
             // starting slot.
@@ -125,8 +128,7 @@ public class WarpsInventory extends InventoryInterface {
 
             if (warp.isBanned(player.getUuid())) {
                 item.setLore("&7You are banned from this warp.");
-            }
-            else {
+            } else {
                 item.addAction((ClickAction) (user, type, inventory) -> {
                     player.sendMessage("&7Teleporting to " + warp.getName() + "...");
                     warp.teleport(player);
@@ -136,6 +138,8 @@ public class WarpsInventory extends InventoryInterface {
             // Otherwise, add the warp item.
             this.setItem(item);
         }
+
+        return this;
     }
 
     /**

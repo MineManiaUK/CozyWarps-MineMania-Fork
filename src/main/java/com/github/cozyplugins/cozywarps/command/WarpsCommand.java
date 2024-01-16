@@ -14,6 +14,12 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents the main command used to interact
+ * with warps.
+ * This command by its self will show the
+ * list of warps.
+ */
 public class WarpsCommand implements CommandType {
 
     @Override

@@ -13,15 +13,12 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents a warp player can warp to.
  */
-public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, Savable {
+public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, Savable, Comparable<Warp> {
 
     private final @NotNull UUID identifier;
     private @NotNull String name;
@@ -99,6 +96,15 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         return this.bannedPlayers.stream().map(UUID::toString).toList();
     }
 
+    /**
+     * Used to get the number of visits this warp has had.
+     *
+     * @return The number of visits.
+     */
+    public int getVisits() {
+        return this.visits;
+    }
+
     public @NotNull Warp setMaterialAsString(@NotNull String materialName) {
         this.material = Material.valueOf(materialName.toUpperCase());
         return this;
@@ -139,13 +145,8 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         if (this.location == null) return false;
 
         // Check if the block below is air.
-        if (this.location.clone()
-                .add(new Vector(0 ,-1, 0)).getBlock().getType() == Material.AIR) {
-
-            return false;
-        }
-
-        return true;
+        return this.location.clone()
+                .add(new Vector(0, -1, 0)).getBlock().getType() != Material.AIR;
     }
 
     /**
@@ -223,5 +224,10 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     @Override
     public void save() {
         CozyWarps.getInstance().updateWarp(this);
+    }
+
+    @Override
+    public int compareTo(@NotNull Warp warp) {
+        return Integer.compare(this.visits, warp.getVisits());
     }
 }

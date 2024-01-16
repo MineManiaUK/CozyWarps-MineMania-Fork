@@ -16,9 +16,11 @@ import java.util.UUID;
  */
 public final class CozyWarps extends CozyPlugin {
 
-    private static @SuppressWarnings("all") @NotNull CozyWarps instance;
+    private static @SuppressWarnings("all")
+    @NotNull CozyWarps instance;
 
-    private @SuppressWarnings("all") @NotNull Configuration storage;
+    private @SuppressWarnings("all")
+    @NotNull Configuration storage;
 
     @Override
     public boolean enableCommandDirectory() {
