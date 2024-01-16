@@ -32,6 +32,7 @@ public final class CozyWarps extends CozyPlugin {
 
         // Create the instance of the storage configuration.
         this.storage = ConfigurationFactory.YAML.create(this.getDataFolder(), "storage");
+        this.storage.load();
 
         // Initialise the instance getter.
         CozyWarps.instance = this;
@@ -81,6 +82,7 @@ public final class CozyWarps extends CozyPlugin {
      */
     public @NotNull CozyWarps updateWarp(@NotNull Warp warp) {
         this.storage.set(warp.getIdentifier().toString(), warp.convert().getMap());
+        this.storage.save();
         return this;
     }
 

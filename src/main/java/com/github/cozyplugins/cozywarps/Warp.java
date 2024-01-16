@@ -5,6 +5,7 @@ import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozylibrary.indicator.Savable;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
+import com.github.cozyplugins.cozywarps.indicator.LocationConverter;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.Bukkit;
@@ -20,7 +21,7 @@ import java.util.*;
 /**
  * Represents a warp player can warp to.
  */
-public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, Savable, Comparable<Warp> {
+public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, Savable, Comparable<Warp>, LocationConverter {
 
     private final @NotNull UUID identifier;
     private @NotNull UUID ownerUuid;
@@ -111,6 +112,12 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         return this.location;
     }
 
+    public @NotNull ConfigurationSection getLocationAsSection() {
+        ConfigurationSection section = new MemoryConfigurationSection(new LinkedHashMap<>());
+        if (this.location == null) return section;
+        return this.getLocationAsConfigurationSection(this.location);
+    }
+
     /**
      * Used to get the banned players uuid as a string list.
      *
@@ -198,6 +205,18 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      */
     public @NotNull Warp setLocation(@Nullable Location location) {
         this.location = location;
+        return this;
+    }
+
+    /**
+     * Used to set the location of the warp given a configuration
+     * section with the location infomation.
+     *
+     * @param section The instance of the location configuration section.
+     * @return This instance.
+     */
+    public @NotNull Warp setLocationAsConfigurationSection(@NotNull ConfigurationSection section) {
+        this.location = this.getConfigurationSectionAsLocation(section);
         return this;
     }
 
@@ -313,6 +332,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         section.set("name", this.name);
         section.set("description", this.description);
         section.set("material", this.material.toString());
+        section.set("location", this.getLocationAsSection().getMap());
         section.set("banned_players", this.getBannedPlayersAsStringList());
         section.set("visits", this.visits);
 
@@ -325,6 +345,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         this.name = section.getString("name", "null");
         this.description = section.getString("description");
         this.setMaterialAsString(section.getString("material", "COMPASS"));
+        this.setLocationAsConfigurationSection(section.getSection("location"));
         this.setBannedPlayersAsStringList(section.getListString("banned_players"));
         this.visits = section.getInteger("visits");
 

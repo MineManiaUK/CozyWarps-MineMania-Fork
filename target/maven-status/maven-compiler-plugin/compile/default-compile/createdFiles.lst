@@ -1,3 +1,5 @@
-com/github/cozyplugins/cozywarps/CozyWarps.class
 com/github/cozyplugins/cozywarps/inventory/WarpsInventory.class
+com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.class
+com/github/cozyplugins/cozywarps/Warp.class
+com/github/cozyplugins/cozywarps/CozyWarps.class
 com/github/cozyplugins/cozywarps/command/WarpsCommand.class
