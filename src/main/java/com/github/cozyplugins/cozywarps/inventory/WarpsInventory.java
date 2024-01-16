@@ -86,6 +86,9 @@ public class WarpsInventory extends InventoryInterface {
                     this.onGenerate(player);
                 })
         );
+
+        // Add all the warps.
+        this.addAllWarps(player);
     }
 
     /**
@@ -98,7 +101,6 @@ public class WarpsInventory extends InventoryInterface {
      */
     public @NotNull WarpsInventory addAllWarps(PlayerUser player) {
 
-        final int maxPages = this.getMaxPages();
         int warpNumber = 0;
         int startingSlot = this.page * 45;
         int endingSlot = (this.page + 1) * 45;
@@ -126,12 +128,15 @@ public class WarpsInventory extends InventoryInterface {
             InventoryItem item = warp.createInventoryItem()
                     .addSlot(warpNumber % 45);
 
+            // Check if the player is banned.
             if (warp.isBanned(player.getUuid())) {
                 item.setLore("&7You are banned from this warp.");
             } else {
                 item.addAction((ClickAction) (user, type, inventory) -> {
                     player.sendMessage("&7Teleporting to " + warp.getName() + "...");
                     warp.teleport(player);
+                    warp.incrementVisits();
+                    warp.save();
                 });
             }
 

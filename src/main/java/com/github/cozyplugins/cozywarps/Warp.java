@@ -7,8 +7,10 @@ import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +23,7 @@ import java.util.*;
 public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, Savable, Comparable<Warp> {
 
     private final @NotNull UUID identifier;
+    private @NotNull UUID ownerUuid;
     private @NotNull String name;
     private @Nullable String description;
     private @NotNull Material material;
@@ -36,6 +39,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      */
     public Warp(@NotNull UUID identifier) {
         this.identifier = identifier;
+        this.ownerUuid = UUID.randomUUID();
         this.name = "null";
         this.material = Material.COMPASS;
         this.bannedPlayers = new ArrayList<>();
@@ -48,6 +52,26 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      */
     public @NotNull UUID getIdentifier() {
         return this.identifier;
+    }
+
+    /**
+     * Used to get the owner's uuid.
+     *
+     * @return The owner's uuid.
+     */
+    public @NotNull UUID getOwnerUuid() {
+        return this.ownerUuid;
+    }
+
+    /**
+     * Used to get the owner's name.
+     *
+     * @return The owner's name.
+     */
+    public @NotNull String getOwnerName() {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(this.ownerUuid);
+        if (player.getName() == null) return "Null";
+        return player.getName();
     }
 
     /**
@@ -105,8 +129,75 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         return this.visits;
     }
 
+    /**
+     * Used to set the owner's uuid.
+     *
+     * @param ownerUuid The owner's uuid.
+     * @return This instance.
+     */
+    public @NotNull Warp setOwnerUuid(@NotNull UUID ownerUuid) {
+        this.ownerUuid = ownerUuid;
+        return this;
+    }
+
+    /**
+     * Used to set the name of the warp.
+     * The name cannot be null.
+     *
+     * @param name The name of the warp to set.
+     * @return This instance.
+     */
+    public @NotNull Warp setName(@NotNull String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Used to set the description of the warp.
+     *
+     * @param description The description of the warp.
+     * @return This instance.
+     */
+    public @NotNull Warp setDescription(@Nullable String description) {
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Used to set the material that should be
+     * used as the warp's icon.
+     *
+     * @param material The material of the icon.
+     * @return This instance.
+     */
+    public @NotNull Warp setMaterial(@NotNull Material material) {
+        this.material = material;
+        return this;
+    }
+
+    /**
+     * Used to set the material that should be
+     * used as the warp's icon.
+     * This value is given as a string that will be
+     * converted into the material enum.
+     *
+     * @param materialName The material's name to set as the icon.
+     * @return This instance.
+     */
     public @NotNull Warp setMaterialAsString(@NotNull String materialName) {
         this.material = Material.valueOf(materialName.toUpperCase());
+        return this;
+    }
+
+    /**
+     * Used to set the location of the warp.
+     * This is where the players will be teleported to.
+     *
+     * @param location The location of the warp.
+     * @return This instance.
+     */
+    public @NotNull Warp setLocation(@Nullable Location location) {
+        this.location = location;
         return this;
     }
 
@@ -119,6 +210,28 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      */
     public @NotNull Warp setBannedPlayersAsStringList(@NotNull List<String> playerUuids) {
         this.bannedPlayers = playerUuids.stream().map(UUID::fromString).toList();
+        return this;
+    }
+
+    /**
+     * Used to set the number of visits this warp should display.
+     *
+     * @param visits The number of visits to set this warp to.
+     * @return This instance.
+     */
+    public @NotNull Warp setVisits(int visits) {
+        this.visits = visits;
+        return this;
+    }
+
+    /**
+     * Used to increment the number of visits
+     * to this warp.
+     *
+     * @return This instance.
+     */
+    public @NotNull Warp incrementVisits() {
+        this.visits++;
         return this;
     }
 
@@ -162,6 +275,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
                     .setLore("&8&l&m------------",
                             "&f" + this.description,
                             "&7",
+                            "&fOwner &a" + this.getOwnerName(),
                             "&fVisits &a" + this.visits);
         }
 
@@ -169,6 +283,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
                 .setMaterial(this.material)
                 .setName("&e&l" + this.name)
                 .setLore("&8&l&m------------",
+                        "&fOwner &a" + this.getOwnerName(),
                         "&fVisits &a" + this.visits);
     }
 

@@ -9,44 +9,40 @@ import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
-import com.github.cozyplugins.cozywarps.inventory.WarpsInventory;
+import com.github.cozyplugins.cozywarps.Warp;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Represents the main command used to interact
- * with warps.
- * This command by its self will show the
- * list of warps.
- */
-public class WarpsCommand implements CommandType {
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+public class WarpsCreateCommand implements CommandType {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "warps";
+        return "create";
     }
 
     @Override
     public @Nullable String getSyntax() {
-        return "/[name]";
+        return "/[parent] [name]";
     }
 
     @Override
     public @Nullable String getDescription() {
-        return "Used to see all the warps.";
+        return "Used to create a warp.";
     }
 
     @Override
     public @Nullable CommandTypePool getSubCommandTypes() {
-        CommandTypePool pool = new CommandTypePool();
-        pool.add(new WarpsCreateCommand());
-        return pool;
+        return null;
     }
 
     @Override
     public @Nullable CommandSuggestions getSuggestions(@NotNull User user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        return null;
+        return new CommandSuggestions().append(List.of("<name>"));
     }
 
     @Override
@@ -57,12 +53,26 @@ public class WarpsCommand implements CommandType {
     @Override
     public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
 
-        // Send a message.
-        user.sendMessage("&7Opening the warps inventory...");
+        // Get the warp's name.
+        final String name = arguments.getArguments().get(0);
 
-        // Open the inventory.
-        WarpsInventory inventory = new WarpsInventory();
-        inventory.open(user.getPlayer());
+        Warp warp = new Warp(UUID.randomUUID());
+        warp.setLocation(user.getPlayer().getLocation());
+
+        // Check if the location is safe.
+        if (!warp.isSafe()) {
+            user.sendMessage("&7This location is not safe for players to warp to.");
+            user.sendMessage("&7- &fThe block below you should not be air.");
+            return new CommandStatus();
+        }
+
+        // Create the warp credentials.
+        warp.setOwnerUuid(user.getUuid());
+        warp.setName(name);
+        warp.save();
+
+        // Send the player a message.
+        user.sendMessage("&7Created a new warp with name &f" + name + "&7.");
         return new CommandStatus();
     }
 
