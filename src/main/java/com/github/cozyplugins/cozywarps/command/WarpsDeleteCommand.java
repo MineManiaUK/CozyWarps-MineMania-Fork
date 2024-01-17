@@ -49,6 +49,8 @@ public class WarpsDeleteCommand implements CommandType {
 
     @Override
     public @Nullable CommandSuggestions getSuggestions(@NotNull User user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
+
+        // Check if they have staff permissions.
         if (user.hasPermission("cozywarps.staff")) {
 
             // Create the base suggestions.
@@ -64,6 +66,7 @@ public class WarpsDeleteCommand implements CommandType {
             }
             return suggestions;
         }
+
         return new CommandSuggestions().append(CozyWarps.getInstance()
                         .getAllWarps(user.getUuid()).stream().map(Warp::getName).toList()
                 );
@@ -95,6 +98,7 @@ public class WarpsDeleteCommand implements CommandType {
             final String playerName = arguments.getArguments().get(0);
             final String warpName = arguments.getArguments().get(1);
 
+            user.sendMessage("&7Opening the confirmation inventory...");
             ConfirmationInventory inventory = new ConfirmationInventory(
                     new ConfirmAction()
                             .setAnvilTitle("&8&lDelete " + warpName)
@@ -108,6 +112,24 @@ public class WarpsDeleteCommand implements CommandType {
             );
             inventory.open(user.getPlayer());
         }
+
+        // Get the warp name.
+        final String warpName = arguments.getArguments().get(0);
+
+        user.sendMessage("&7Opening the confirmation inventory...");
+        ConfirmationInventory inventory = new ConfirmationInventory(
+                new ConfirmAction()
+                        .setAnvilTitle("&8&lDelete " + warpName)
+                        .setAbort(playerUser -> {
+                            user.sendMessage("&7Aborted deletion of " + warpName + ".");
+                        })
+                        .setConfirm(playerUser -> {
+                            user.sendMessage("&7Deleting warp " + warpName + ".");
+                            CozyWarps.getInstance().removeWarp(user.getName(), warpName);
+                        })
+        );
+        inventory.open(user.getPlayer());
+
         return new CommandStatus();
     }
 

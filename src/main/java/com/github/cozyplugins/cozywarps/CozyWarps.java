@@ -40,7 +40,7 @@ public final class CozyWarps extends CozyPlugin {
 
         // Create the instance of the config file.
         this.config = ConfigurationFactory.YAML.create(this.getDataFolder(), "config");
-        this.config.setDefaultPath("src/main/resources/config.yml");
+        this.config.setDefaultPath("config.yml");
         this.config.load();
 
         // Initialise the instance getter.
@@ -94,7 +94,7 @@ public final class CozyWarps extends CozyPlugin {
      */
     public @NotNull Optional<Warp> getWarp(@NotNull UUID playerUuid, @NotNull String warpName) {
         for (Warp warp : this.getAllWarps()) {
-            if (warp.getOwnerUuid() != playerUuid) continue;
+            if (!warp.getOwnerUuid().equals(playerUuid)) continue;
             if (!warp.getName().equals(warpName)) continue;
             return Optional.of(warp);
         }
@@ -126,7 +126,7 @@ public final class CozyWarps extends CozyPlugin {
     public @NotNull List<Warp> getAllWarps(@NotNull UUID playerUuid) {
         List<Warp> list = new ArrayList<>();
         for (Warp warp : this.getAllWarps()) {
-            if (warp.getOwnerUuid() == playerUuid) list.add(warp);
+            if (warp.getOwnerUuid().equals(playerUuid)) list.add(warp);
         }
         return list;
     }
@@ -140,7 +140,7 @@ public final class CozyWarps extends CozyPlugin {
     public int getAmountOwned(@NotNull UUID uuid) {
         int amountOwned = 0;
         for (Warp warp : this.getAllWarps()) {
-            if (warp.getOwnerUuid() == uuid) amountOwned++;
+            if (warp.getOwnerUuid().equals(uuid)) amountOwned++;
         }
         return amountOwned;
     }
@@ -190,8 +190,7 @@ public final class CozyWarps extends CozyPlugin {
      */
     public boolean hasVisited(@NotNull UUID warpUuid, @NotNull UUID playerUuid) {
         for (WarpVisit warpVisit : this.warpVisitList) {
-            if (warpVisit.isWarpUuid(warpUuid)
-                    && warpVisit.isPlayerUuid(playerUuid)) {
+            if (warpVisit.isWarpUuid(warpUuid) && warpVisit.isPlayerUuid(playerUuid)) {
                 return true;
             }
         }
@@ -217,10 +216,15 @@ public final class CozyWarps extends CozyPlugin {
      * @param warpName The name of the warp.
      * @return This instance.
      */
-    public @NotNull CozyWarps removeWarp(String playerName, String warpName) {
+    public @NotNull CozyWarps removeWarp(@NotNull String playerName, @NotNull String warpName) {
         for (Warp warp : this.getAllWarps()) {
-            if (Bukkit.getOfflinePlayer(playerName).getUniqueId() != warp.getOwnerUuid()) continue;
+
+            // Check the credentials.
+            if (!Bukkit.getOfflinePlayer(playerName).getUniqueId().equals(warp.getOwnerUuid())) continue;
             if (!warpName.equals(warp.getName())) continue;
+
+            System.out.println("a");
+
             this.storage.set(warp.getIdentifier().toString(), null);
             this.storage.save();
             return this;

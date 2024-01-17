@@ -41,6 +41,7 @@ public class WarpsCommand implements CommandType {
     public @Nullable CommandTypePool getSubCommandTypes() {
         CommandTypePool pool = new CommandTypePool();
         pool.add(new WarpsCreateCommand());
+        pool.add(new WarpsDeleteCommand());
         return pool;
     }
 

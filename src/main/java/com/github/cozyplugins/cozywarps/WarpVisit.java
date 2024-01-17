@@ -24,10 +24,10 @@ public class WarpVisit {
     }
 
     public boolean isWarpUuid(@NotNull UUID warpUuid) {
-        return this.warpUuid == warpUuid;
+        return this.warpUuid.equals(warpUuid);
     }
 
     public boolean isPlayerUuid(@NotNull UUID playerUuid) {
-        return this.playerUuid == playerUuid;
+        return this.playerUuid.equals(playerUuid);
     }
 }

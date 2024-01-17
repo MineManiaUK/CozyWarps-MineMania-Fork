@@ -5,3 +5,7 @@ warps:
   create:
     enabled: true
     name: "create"
+
+  delete:
+    enabled: true
+    name: "delete"
