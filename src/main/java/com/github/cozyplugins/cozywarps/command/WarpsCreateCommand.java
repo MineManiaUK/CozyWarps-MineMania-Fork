@@ -21,6 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Represents the warp create command.
+ * Used to create a warp.
+ */
 public class WarpsCreateCommand implements CommandType {
 
     @Override

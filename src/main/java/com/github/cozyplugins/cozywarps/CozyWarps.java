@@ -146,6 +146,20 @@ public final class CozyWarps extends CozyPlugin {
     }
 
     /**
+     * Used to get the warp owners names.
+     *
+     * @return The names of the warp owners.
+     */
+    public @NotNull List<String> getOwnerNames() {
+        List<String> list = new ArrayList<>();
+        for (Warp warp : this.getAllWarps()) {
+            if (list.contains(warp.getOwnerName())) continue;
+            list.add(warp.getOwnerName());
+        }
+        return list;
+    }
+
+    /**
      * Used to add a warp visit to the visit list.
      *
      * @param warpVisit The instance of the warp visit.
@@ -193,6 +207,24 @@ public final class CozyWarps extends CozyPlugin {
     public @NotNull CozyWarps updateWarp(@NotNull Warp warp) {
         this.storage.set(warp.getIdentifier().toString(), warp.convert().getMap());
         this.storage.save();
+        return this;
+    }
+
+    /**
+     * Used to remove a warp from storage.
+     *
+     * @param playerName The player's name.
+     * @param warpName The name of the warp.
+     * @return This instance.
+     */
+    public @NotNull CozyWarps removeWarp(String playerName, String warpName) {
+        for (Warp warp : this.getAllWarps()) {
+            if (Bukkit.getOfflinePlayer(playerName).getUniqueId() != warp.getOwnerUuid()) continue;
+            if (!warpName.equals(warp.getName())) continue;
+            this.storage.set(warp.getIdentifier().toString(), null);
+            this.storage.save();
+            return this;
+        }
         return this;
     }
 

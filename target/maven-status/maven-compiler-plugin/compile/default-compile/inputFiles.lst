@@ -1,5 +1,8 @@
 /Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/CozyWarps.java
 /Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/Warp.java
+/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsDeleteCommand.java
 /Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.java
 /Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/inventory/WarpsInventory.java
 /Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCommand.java
+/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/indicator/LocationConverter.java
+/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/WarpVisit.java
