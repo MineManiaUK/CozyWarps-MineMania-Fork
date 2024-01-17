@@ -30,7 +30,7 @@ public class WarpsCreateCommand implements CommandType {
 
     @Override
     public @Nullable String getSyntax() {
-        return "/[parent] [name]";
+        return "/[parent] [name] <name>";
     }
 
     @Override
@@ -61,6 +61,12 @@ public class WarpsCreateCommand implements CommandType {
 
         Warp warp = new Warp(UUID.randomUUID());
         warp.setLocation(user.getPlayer().getLocation());
+
+        // Check the warp's name.
+        if (CozyWarps.getInstance().getWarp(user.getUuid(), name).isPresent()) {
+            user.sendMessage("&7You already have a warp with this name. Please use a different name.");
+            return new CommandStatus();
+        }
 
         // Check if the location is safe.
         if (!warp.isSafe()) {

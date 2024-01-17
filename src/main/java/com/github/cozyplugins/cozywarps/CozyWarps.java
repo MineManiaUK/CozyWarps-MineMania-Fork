@@ -85,6 +85,23 @@ public final class CozyWarps extends CozyPlugin {
     }
 
     /**
+     * Used to get a warp a player owns.
+     * A player cannot have two warps named the same.
+     *
+     * @param playerUuid The player's uuid.
+     * @param warpName The warp's name.
+     * @return The optional warp.
+     */
+    public @NotNull Optional<Warp> getWarp(@NotNull UUID playerUuid, @NotNull String warpName) {
+        for (Warp warp : this.getAllWarps()) {
+            if (warp.getOwnerUuid() != playerUuid) continue;
+            if (!warp.getName().equals(warpName)) continue;
+            return Optional.of(warp);
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Used to get the list of all warps.
      *
      * @return The list of all warps.
@@ -97,6 +114,20 @@ public final class CozyWarps extends CozyPlugin {
             list.add(new Warp(UUID.fromString(key)).convert(this.storage.getSection(key)));
         }
 
+        return list;
+    }
+
+    /**
+     * Used to get all warps a player owns.
+     *
+     * @param playerUuid The player uuid.
+     * @return The list of their warps.
+     */
+    public @NotNull List<Warp> getAllWarps(@NotNull UUID playerUuid) {
+        List<Warp> list = new ArrayList<>();
+        for (Warp warp : this.getAllWarps()) {
+            if (warp.getOwnerUuid() == playerUuid) list.add(warp);
+        }
         return list;
     }
 
