@@ -16,7 +16,8 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 /**
  * Represents a warp player can warp to.
@@ -30,7 +31,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     private @NotNull Material material;
 
     private @Nullable Location location;
-    private @NotNull List<UUID> bannedPlayers;
     private int visits;
 
     /**
@@ -43,7 +43,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         this.ownerUuid = UUID.randomUUID();
         this.name = "null";
         this.material = Material.COMPASS;
-        this.bannedPlayers = new ArrayList<>();
     }
 
     /**
@@ -116,15 +115,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         ConfigurationSection section = new MemoryConfigurationSection(new LinkedHashMap<>());
         if (this.location == null) return section;
         return this.getLocationAsConfigurationSection(this.location);
-    }
-
-    /**
-     * Used to get the banned players uuid as a string list.
-     *
-     * @return The string list of uuids.
-     */
-    public @NotNull List<String> getBannedPlayersAsStringList() {
-        return this.bannedPlayers.stream().map(UUID::toString).toList();
     }
 
     /**
@@ -221,18 +211,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     }
 
     /**
-     * Used to set the banned players list using a list of uuids
-     * that are strings.
-     *
-     * @param playerUuids The string list of player uuids.
-     * @return This instance.
-     */
-    public @NotNull Warp setBannedPlayersAsStringList(@NotNull List<String> playerUuids) {
-        this.bannedPlayers = playerUuids.stream().map(UUID::fromString).toList();
-        return this;
-    }
-
-    /**
      * Used to set the number of visits this warp should display.
      *
      * @param visits The number of visits to set this warp to.
@@ -252,17 +230,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     public @NotNull Warp incrementVisits() {
         this.visits++;
         return this;
-    }
-
-    /**
-     * Used to check if a player is banned
-     * by checking the uuids.
-     *
-     * @param playerUuid The players uuid.
-     * @return True if they are banned.
-     */
-    public boolean isBanned(@NotNull UUID playerUuid) {
-        return this.bannedPlayers.contains(playerUuid);
     }
 
     /**
@@ -334,7 +301,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         section.set("description", this.description);
         section.set("material", this.material.toString());
         section.set("location", this.getLocationAsSection().getMap());
-        section.set("banned_players", this.getBannedPlayersAsStringList());
         section.set("visits", this.visits);
 
         return section;
@@ -348,7 +314,6 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         this.description = section.getString("description");
         this.setMaterialAsString(section.getString("material", "COMPASS"));
         this.setLocationAsConfigurationSection(section.getSection("location"));
-        this.setBannedPlayersAsStringList(section.getListString("banned_players"));
         this.visits = section.getInteger("visits");
 
         return this;

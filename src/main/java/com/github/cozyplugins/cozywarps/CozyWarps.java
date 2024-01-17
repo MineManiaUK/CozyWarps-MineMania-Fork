@@ -19,7 +19,8 @@ public final class CozyWarps extends CozyPlugin {
 
     private static @NotNull CozyWarps instance;
 
-    private @NotNull Configuration storage;
+    private @NotNull Configuration warpConfig;
+    private @NotNull Configuration banConfig;
     private @NotNull Configuration config;
     private @NotNull List<WarpVisit> warpVisitList = new ArrayList<>();
 
@@ -35,8 +36,11 @@ public final class CozyWarps extends CozyPlugin {
         this.warpVisitList = new ArrayList<>();
 
         // Create the instance of the storage configuration.
-        this.storage = ConfigurationFactory.YAML.create(this.getDataFolder(), "storage");
-        this.storage.load();
+        this.warpConfig = ConfigurationFactory.YAML.create(this.getDataFolder(), "storage");
+        this.warpConfig.load();
+
+        this.banConfig = ConfigurationFactory.YAML.create(this.getDataFolder(), "bans");
+        this.banConfig.load();
 
         // Create the instance of the config file.
         this.config = ConfigurationFactory.YAML.create(this.getDataFolder(), "config");
@@ -77,8 +81,8 @@ public final class CozyWarps extends CozyPlugin {
      * @return The optional warp.
      */
     public @NotNull Optional<Warp> getWarp(@NotNull UUID identifier) {
-        if (this.storage.getKeys().contains(identifier.toString())) {
-            return Optional.of(new Warp(identifier).convert(this.storage.getSection(identifier.toString())));
+        if (this.warpConfig.getKeys().contains(identifier.toString())) {
+            return Optional.of(new Warp(identifier).convert(this.warpConfig.getSection(identifier.toString())));
         }
 
         return Optional.empty();
@@ -89,7 +93,7 @@ public final class CozyWarps extends CozyPlugin {
      * A player cannot have two warps named the same.
      *
      * @param playerUuid The player's uuid.
-     * @param warpName The warp's name.
+     * @param warpName   The warp's name.
      * @return The optional warp.
      */
     public @NotNull Optional<Warp> getWarp(@NotNull UUID playerUuid, @NotNull String warpName) {
@@ -110,8 +114,8 @@ public final class CozyWarps extends CozyPlugin {
         List<Warp> list = new ArrayList<>();
 
         // Loop though all keys.
-        for (String key : this.storage.getKeys()) {
-            list.add(new Warp(UUID.fromString(key)).convert(this.storage.getSection(key)));
+        for (String key : this.warpConfig.getKeys()) {
+            list.add(new Warp(UUID.fromString(key)).convert(this.warpConfig.getSection(key)));
         }
 
         return list;
@@ -184,7 +188,7 @@ public final class CozyWarps extends CozyPlugin {
      * Used to check if the list of visits contains a certain
      * warp uuid and player uuid.
      *
-     * @param warpUuid The warp uuid to check.
+     * @param warpUuid   The warp uuid to check.
      * @param playerUuid The player uuid to check.
      * @return True if they have visited recently.
      */
@@ -198,14 +202,26 @@ public final class CozyWarps extends CozyPlugin {
     }
 
     /**
+     * Used to check if a player is banned from another player's warps.
+     *
+     * @param playerUuid The players uuid.
+     * @param ownerUuid  The owners uuid.
+     * @return True if they are banned.
+     */
+    public boolean isBanned(@NotNull UUID playerUuid, @NotNull UUID ownerUuid) {
+        List<String> bannedPlayers = this.banConfig.getListString(ownerUuid.toString());
+        return bannedPlayers.contains(playerUuid.toString());
+    }
+
+    /**
      * Used to update or insert a warp in storage.
      *
      * @param warp The instance of the warp to update or insert.
      * @return This instance.
      */
     public @NotNull CozyWarps updateWarp(@NotNull Warp warp) {
-        this.storage.set(warp.getIdentifier().toString(), warp.convert().getMap());
-        this.storage.save();
+        this.warpConfig.set(warp.getIdentifier().toString(), warp.convert().getMap());
+        this.warpConfig.save();
         return this;
     }
 
@@ -213,7 +229,7 @@ public final class CozyWarps extends CozyPlugin {
      * Used to remove a warp from storage.
      *
      * @param playerName The player's name.
-     * @param warpName The name of the warp.
+     * @param warpName   The name of the warp.
      * @return This instance.
      */
     public @NotNull CozyWarps removeWarp(@NotNull String playerName, @NotNull String warpName) {
@@ -225,10 +241,24 @@ public final class CozyWarps extends CozyPlugin {
 
             System.out.println("a");
 
-            this.storage.set(warp.getIdentifier().toString(), null);
-            this.storage.save();
+            this.warpConfig.set(warp.getIdentifier().toString(), null);
+            this.warpConfig.save();
             return this;
         }
+        return this;
+    }
+
+    /**
+     * Used to ban a player from an owners warps.
+     *
+     * @param playerUuid The player's uuid to ban.
+     * @param ownerUuid  The owner's uuid.
+     * @return This instance.
+     */
+    public @NotNull CozyWarps banPlayer(@NotNull UUID playerUuid, @NotNull UUID ownerUuid) {
+        List<String> list = this.banConfig.getListString(ownerUuid.toString(), new ArrayList<>());
+        list.add(playerUuid.toString());
+        this.banConfig.set(ownerUuid.toString(), list);
         return this;
     }
 

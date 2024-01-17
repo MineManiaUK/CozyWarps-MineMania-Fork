@@ -19,8 +19,6 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
 /**
  * Represents the warp delete command.
  * Used to delete a warp.
@@ -58,7 +56,7 @@ public class WarpsDeleteCommand implements CommandType {
                     .append(CozyWarps.getInstance().getOwnerNames());
 
             // Add the players warps.
-            if (!arguments.getArguments().isEmpty()) {
+            if (!arguments.getArguments().isEmpty() && !arguments.getArguments().get(0).isEmpty()) {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(arguments.getArguments().get(0));
                 suggestions.append(CozyWarps.getInstance()
                         .getAllWarps(player.getUniqueId()).stream().map(Warp::getName).toList()
@@ -68,8 +66,8 @@ public class WarpsDeleteCommand implements CommandType {
         }
 
         return new CommandSuggestions().append(CozyWarps.getInstance()
-                        .getAllWarps(user.getUuid()).stream().map(Warp::getName).toList()
-                );
+                .getAllWarps(user.getUuid()).stream().map(Warp::getName).toList()
+        );
     }
 
     @Override
@@ -111,6 +109,7 @@ public class WarpsDeleteCommand implements CommandType {
                             })
             );
             inventory.open(user.getPlayer());
+            return new CommandStatus();
         }
 
         // Get the warp name.

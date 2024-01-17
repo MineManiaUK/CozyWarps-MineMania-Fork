@@ -15,7 +15,7 @@ public class WarpVisit {
     /**
      * Used to create a warp visit instance.
      *
-     * @param warpUuid The warp that was visited.
+     * @param warpUuid   The warp that was visited.
      * @param playerUuid The uuid of the player visiting the warp.
      */
     public WarpVisit(@NotNull UUID warpUuid, @NotNull UUID playerUuid) {

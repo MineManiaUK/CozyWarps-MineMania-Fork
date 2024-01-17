@@ -133,7 +133,7 @@ public class WarpsInventory extends InventoryInterface {
                     .addSlot(warpNumber % 45);
 
             // Check if the player is banned.
-            if (warp.isBanned(player.getUuid())) {
+            if (CozyWarps.getInstance().isBanned(player.getUuid(), warp.getOwnerUuid())) {
                 item.setLore("&7You are banned from this warp.");
             } else {
                 item.addAction((ClickAction) (user, type, inventory) -> {
