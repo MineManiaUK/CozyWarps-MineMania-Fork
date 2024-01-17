@@ -20,6 +20,7 @@ public final class CozyWarps extends CozyPlugin {
     private static @NotNull CozyWarps instance;
 
     private @NotNull Configuration storage;
+    private @NotNull Configuration config;
     private @NotNull List<WarpVisit> warpVisitList = new ArrayList<>();
 
     @Override
@@ -37,11 +38,35 @@ public final class CozyWarps extends CozyPlugin {
         this.storage = ConfigurationFactory.YAML.create(this.getDataFolder(), "storage");
         this.storage.load();
 
+        // Create the instance of the config file.
+        this.config = ConfigurationFactory.YAML.create(this.getDataFolder(), "config");
+        this.config.setDefaultPath("src/main/resources/config.yml");
+        this.config.load();
+
         // Initialise the instance getter.
         CozyWarps.instance = this;
 
         // Add all the command types.
         this.addCommandType(new WarpsCommand());
+    }
+
+    /**
+     * Used to get the configuration file.
+     *
+     * @return The configuration file.
+     */
+    public @NotNull Configuration getCozyWarpsConfig() {
+        return this.config;
+    }
+
+    /**
+     * Used to get the price a warp would cost.
+     *
+     * @param warpNumber The number warp they are buying.
+     * @return The price of the warp.
+     */
+    public int getPrice(int warpNumber) {
+        return this.config.getInteger("warp." + warpNumber, -1);
     }
 
     /**
@@ -73,6 +98,20 @@ public final class CozyWarps extends CozyPlugin {
         }
 
         return list;
+    }
+
+    /**
+     * Used to get the number of warps owned by a specific player.
+     *
+     * @param uuid The players uuid.
+     * @return The number of warps they own.
+     */
+    public int getAmountOwned(@NotNull UUID uuid) {
+        int amountOwned = 0;
+        for (Warp warp : this.getAllWarps()) {
+            if (warp.getOwnerUuid() == uuid) amountOwned++;
+        }
+        return amountOwned;
     }
 
     /**

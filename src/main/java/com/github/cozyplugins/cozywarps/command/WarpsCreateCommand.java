@@ -5,10 +5,13 @@ import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandStatus;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandSuggestions;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandTypePool;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
+import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
 import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
+import com.github.cozyplugins.cozywarps.CozyWarps;
 import com.github.cozyplugins.cozywarps.Warp;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -66,13 +69,42 @@ public class WarpsCreateCommand implements CommandType {
             return new CommandStatus();
         }
 
-        // Create the warp credentials.
-        warp.setOwnerUuid(user.getUuid());
-        warp.setName(name);
-        warp.save();
+        // Get the number of warps they own.
+        final int amountOfWarpsOwned = CozyWarps.getInstance().getAmountOwned(user.getUuid());
+        final int cost = CozyWarps.getInstance().getPrice(amountOfWarpsOwned + 1);
 
-        // Send the player a message.
-        user.sendMessage("&7Created a new warp with name &f" + name + "&7.");
+        // Check if the player can no longer buy any more warps.
+        if (cost == -1) {
+            user.sendMessage("&7You already own the maximum amount of warps.");
+            return new CommandStatus();
+        }
+
+        // Check if the player has enough money.
+        if (user.getMoney() < cost) {
+            user.sendMessage("&7You do not have enough money to buy another warp. Another warp costs &f" + cost + " coins");
+            return new CommandStatus();
+        }
+
+        // Create a configuration menu.
+        ConfirmationInventory inventory = new ConfirmationInventory(
+                new ConfirmAction()
+                        .setAnvilTitle("&7&lBuy for &8&l" + cost + " coins")
+                        .setAbort(playerUser -> {
+                            playerUser.sendMessage("&7Aborted warp creation.");
+                        })
+                        .setConfirm(playerUser -> {
+                            playerUser.sendMessage("&7You have brought another warp for &f" + cost + " coins");
+
+                            // Create the warp credentials.
+                            warp.setOwnerUuid(user.getUuid());
+                            warp.setName(name);
+                            warp.save();
+
+                            // Send the player a message.
+                            user.sendMessage("&7Created a new warp with name &f" + name + "&7.");
+                        })
+        );
+        inventory.open(user.getPlayer());
         return new CommandStatus();
     }
 
