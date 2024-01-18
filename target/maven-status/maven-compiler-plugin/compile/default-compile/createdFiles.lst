@@ -2,6 +2,7 @@ com/github/cozyplugins/cozywarps/inventory/MyWarpsInventory.class
 com/github/cozyplugins/cozywarps/Warp.class
 com/github/cozyplugins/cozywarps/inventory/WarpEditorInventory.class
 com/github/cozyplugins/cozywarps/inventory/WarpsInventory.class
+com/github/cozyplugins/cozywarps/command/WarpsEditorCommand.class
 com/github/cozyplugins/cozywarps/WarpVisit.class
 com/github/cozyplugins/cozywarps/command/WarpsDeleteCommand.class
 com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.class
