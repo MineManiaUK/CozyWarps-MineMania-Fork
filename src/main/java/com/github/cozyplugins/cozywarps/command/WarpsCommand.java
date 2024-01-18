@@ -60,6 +60,8 @@ public class WarpsCommand implements CommandType {
         CommandTypePool pool = new CommandTypePool();
         pool.add(new WarpsCreateCommand());
         pool.add(new WarpsDeleteCommand());
+        pool.add(new WarpsBanCommand());
+        pool.add(new WarpsUnBanCommand());
         return pool;
     }
 
