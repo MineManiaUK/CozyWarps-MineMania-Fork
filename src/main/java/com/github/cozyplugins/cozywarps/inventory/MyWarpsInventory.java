@@ -86,19 +86,18 @@ public class MyWarpsInventory extends InventoryInterface {
         );
 
         // Add warps.
-        this.addWarpItems(player);
+        this.addWarpItems();
     }
 
     /**
-     * Used to add the warp items.
-     *
-     * @param player The instance of the player.
+     * Used to add the warp items that
+     * the owner owns.
      */
-    public void addWarpItems(@NotNull PlayerUser player) {
+    public void addWarpItems() {
 
         int slot = 10;
 
-        for (Warp warp : CozyWarps.getInstance().getAllWarps(player.getUuid())) {
+        for (Warp warp : CozyWarps.getInstance().getAllWarps(this.ownerUuid)) {
 
             InventoryItem item = warp.createInventoryItem();
             item.addLore("&7");
