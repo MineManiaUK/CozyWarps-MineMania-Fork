@@ -62,7 +62,6 @@ public class MyWarpsInventory extends InventoryInterface {
                 .setLore("&7Click to go back to the warps menu.")
                 .addSlot(45)
                 .addAction((ClickAction) (user, type, inventory) -> {
-                    user.sendMessage("&7Opening warps menu...");
                     new WarpsInventory().open(user.getPlayer());
                 })
         );
@@ -104,7 +103,7 @@ public class MyWarpsInventory extends InventoryInterface {
             item.addLore("&eClick to edit this warp.");
             item.addSlot(slot);
             item.addAction((ClickAction) (user, type, inventory) -> {
-               // TODO
+               new WarpEditorInventory(warp.getIdentifier()).open(user.getPlayer());
             });
 
             // Add the item to the inventory.

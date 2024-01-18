@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2564f889-68e2-4085-be24-2a9d4ec2eea5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/graphics/warps_my.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/MyWarpsInventory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +130,7 @@
       <workItem from="1705432439363" duration="1649000" />
       <workItem from="1705442249021" duration="4873000" />
       <workItem from="1705591525650" duration="920000" />
-      <workItem from="1705604241350" duration="881000" />
+      <workItem from="1705604241350" duration="2279000" />
     </task>
     <servers />
   </component>

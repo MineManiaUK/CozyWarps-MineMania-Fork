@@ -1,8 +1,13 @@
+com/github/cozyplugins/cozywarps/inventory/MyWarpsInventory.class
+com/github/cozyplugins/cozywarps/Warp.class
+com/github/cozyplugins/cozywarps/inventory/WarpEditorInventory.class
 com/github/cozyplugins/cozywarps/inventory/WarpsInventory.class
 com/github/cozyplugins/cozywarps/WarpVisit.class
 com/github/cozyplugins/cozywarps/command/WarpsDeleteCommand.class
 com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.class
-com/github/cozyplugins/cozywarps/Warp.class
 com/github/cozyplugins/cozywarps/CozyWarps.class
+com/github/cozyplugins/cozywarps/inventory/WarpEditorInventory$1.class
 com/github/cozyplugins/cozywarps/command/WarpsCommand.class
 com/github/cozyplugins/cozywarps/indicator/LocationConverter.class
+com/github/cozyplugins/cozywarps/command/WarpsUnBanCommand.class
+com/github/cozyplugins/cozywarps/command/WarpsBanCommand.class

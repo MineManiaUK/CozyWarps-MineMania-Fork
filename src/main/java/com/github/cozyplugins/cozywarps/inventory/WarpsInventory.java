@@ -76,7 +76,6 @@ public class WarpsInventory extends InventoryInterface {
                 .setLore("&7Click to view your warps!")
                 .addSlot(51, 52, 53)
                 .addAction((ClickAction) (user, type, inventory) -> {
-                    user.sendMessage("&7Opening my warps inventory.");
                     new MyWarpsInventory(user.getUuid()).open(user.getPlayer());
                 })
         );
