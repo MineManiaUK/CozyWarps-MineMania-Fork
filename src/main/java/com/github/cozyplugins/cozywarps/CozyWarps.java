@@ -1,3 +1,21 @@
+/*
+ *     CozyWarps - Used to create player warps.
+ *     Copyright (C) 2024 CozyPlugins
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.github.cozyplugins.cozywarps;
 
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
@@ -164,6 +182,22 @@ public final class CozyWarps extends CozyPlugin {
     }
 
     /**
+     * Used to get the list of banned player names
+     * from an owners warps.
+     *
+     * @param playerUuid The owners uuid.
+     * @return The list of banned names.
+     */
+    public @NotNull List<String> getBannedPlayers(@NotNull UUID playerUuid) {
+        List<String> playerNameList = new ArrayList<>();
+        for (String uuidString : this.banConfig.getListString(playerUuid.toString(), new ArrayList<>())) {
+            UUID uuid = UUID.fromString(uuidString);
+            playerNameList.add(Bukkit.getOfflinePlayer(uuid).getName());
+        }
+        return playerNameList;
+    }
+
+    /**
      * Used to add a warp visit to the visit list.
      *
      * @param warpVisit The instance of the warp visit.
@@ -259,6 +293,22 @@ public final class CozyWarps extends CozyPlugin {
         List<String> list = this.banConfig.getListString(ownerUuid.toString(), new ArrayList<>());
         list.add(playerUuid.toString());
         this.banConfig.set(ownerUuid.toString(), list);
+        this.banConfig.save();
+        return this;
+    }
+
+    /**
+     * Used to unban a player from an owners warps.
+     *
+     * @param playerUuid The player to unban.
+     * @param ownerUuid  The owner of the warps.
+     * @return This instance.
+     */
+    public @NotNull CozyWarps unBanPlayer(@NotNull UUID playerUuid, @NotNull UUID ownerUuid) {
+        List<String> list = this.banConfig.getListString(ownerUuid.toString(), new ArrayList<>());
+        list.remove(playerUuid.toString());
+        this.banConfig.set(ownerUuid.toString(), list);
+        this.banConfig.save();
         return this;
     }
 

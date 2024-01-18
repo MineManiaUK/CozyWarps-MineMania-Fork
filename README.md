@@ -1,2 +1,3 @@
 # CozyWarps
-Ued to create player warps.
+Used to create player warps.
+
