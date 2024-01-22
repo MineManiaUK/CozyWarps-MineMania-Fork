@@ -77,6 +77,11 @@ public class WarpsCreateCommand implements CommandType {
     @Override
     public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
 
+        if (arguments.getArguments().isEmpty() || arguments.getArguments().get(0).isEmpty()) {
+            user.sendMessage("&7Incorrect arguments, please provide a warp name. &f" + this.getSyntax());
+            return new CommandStatus();
+        }
+
         // Get the warp's name.
         final String name = arguments.getArguments().get(0);
 
