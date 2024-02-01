@@ -1,19 +1,19 @@
 /*
- *     CozyWarps - Used to create player warps.
- *     Copyright (C) 2024 CozyPlugins
+ * CozyWarps - Used to create player warps.
+ * Copyright (C) 2024 CozyPlugins
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.github.cozyplugins.cozywarps.command;
@@ -90,7 +90,7 @@ public class WarpsBanCommand implements CommandType {
 
             // Check if they have the correct number of arguments.
             if (arguments.getArguments().size() < 2) {
-                user.sendMessage("&7Please select a warp owner and a player to ban.");
+                user.sendMessage("&7&l> &7Please select a warp owner and a player to ban.");
                 return new CommandStatus();
             }
 
@@ -101,13 +101,13 @@ public class WarpsBanCommand implements CommandType {
             final UUID playerUuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
 
             CozyWarps.getInstance().banPlayer(playerUuid, ownerUuid);
-            user.sendMessage("&7The player &f" + playerName + " &7has been baned from &f" + ownerName + "'s &7warps.");
+            user.sendMessage("&7&l> &7The player &f" + playerName + " &7has been baned from &f" + ownerName + "'s &7warps.");
             return new CommandStatus();
         }
 
         // Check for the correct number of arguments.
         if (arguments.getArguments().isEmpty() || arguments.getArguments().get(0).isEmpty()) {
-            user.sendMessage("&7Please provide a name to ban from your warps.");
+            user.sendMessage("&7&l> &7Please provide a name to ban from your warps.");
             return new CommandStatus();
         }
 
@@ -115,7 +115,7 @@ public class WarpsBanCommand implements CommandType {
         final UUID playerUuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
 
         CozyWarps.getInstance().banPlayer(user.getUuid(), playerUuid);
-        user.sendMessage("&7The player &f" + playerName + " &7has been banned from your warps.");
+        user.sendMessage("&7&l> &7The player &f" + playerName + " &7has been banned from your warps.");
         return null;
     }
 

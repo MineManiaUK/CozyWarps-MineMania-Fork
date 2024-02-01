@@ -1,19 +1,19 @@
 /*
- *     CozyWarps - Used to create player warps.
- *     Copyright (C) 2024 CozyPlugins
+ * CozyWarps - Used to create player warps.
+ * Copyright (C) 2024 CozyPlugins
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.github.cozyplugins.cozywarps.command;
@@ -98,7 +98,7 @@ public class WarpsEditorCommand implements CommandType {
 
         // Check if there are no arguments.
         if (arguments.getArguments().isEmpty()) {
-            user.sendMessage("&7Please provide the correct arguments.");
+            user.sendMessage("&7&l> &7Please provide the correct arguments.");
             return new CommandStatus();
         }
 
@@ -107,7 +107,7 @@ public class WarpsEditorCommand implements CommandType {
 
             // Check they have given the correct number of arguments.
             if (arguments.getArguments().size() < 2) {
-                user.sendMessage("&7Please provide a player name and there warp.");
+                user.sendMessage("&7&l> &7Please provide a player name and there warp.");
                 return new CommandStatus();
             }
 
@@ -123,11 +123,10 @@ public class WarpsEditorCommand implements CommandType {
 
             final Warp warp = CozyWarps.getInstance().getWarp(playerUuid, warpName.toString().trim()).orElse(null);
             if (warp == null) {
-                user.sendMessage("&7Warp does not exist.");
+                user.sendMessage("&7&l> &7Warp does not exist.");
                 return new CommandStatus();
             }
 
-            user.sendMessage("&7Opening the editor inventory...");
             new WarpEditorInventory(warp.getIdentifier()).open(user.getPlayer());
             return new CommandStatus();
         }
@@ -140,11 +139,10 @@ public class WarpsEditorCommand implements CommandType {
 
         final Warp warp = CozyWarps.getInstance().getWarp(user.getUuid(), warpName.toString().trim()).orElse(null);
         if (warp == null) {
-            user.sendMessage("&7Warp does not exist.");
+            user.sendMessage("&7&l> &7Warp does not exist.");
             return new CommandStatus();
         }
 
-        user.sendMessage("&7Opening the editor inventory...");
         new WarpEditorInventory(warp.getIdentifier()).open(user.getPlayer());
         return new CommandStatus();
     }

@@ -1,19 +1,19 @@
 /*
- *     CozyWarps - Used to create player warps.
- *     Copyright (C) 2024 CozyPlugins
+ * CozyWarps - Used to create player warps.
+ * Copyright (C) 2024 CozyPlugins
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.github.cozyplugins.cozywarps.inventory;
@@ -63,7 +63,7 @@ public class WarpEditorInventory extends InventoryInterface {
         // Get the warp.
         Warp warp = this.getWarp().orElse(null);
         if (warp == null) {
-            player.sendMessage("&7Warp returned null, something went wrong.");
+            player.sendMessage("&7&l> &7Warp returned null, something went wrong.");
             return;
         }
 
@@ -118,7 +118,7 @@ public class WarpEditorInventory extends InventoryInterface {
                         warp.setMaterial(item.getMaterial());
                         warp.save();
 
-                        user.sendMessage("&7Changed the warp icon to " + warp.getMaterial().name() + ".");
+                        user.sendMessage("&7&l> &7Changed the warp icon to " + warp.getMaterial().name() + ".");
                         WarpEditorInventory.this.open(user.getPlayer());
                         return new ActionResult().setCancelled(true);
                     }
@@ -140,7 +140,7 @@ public class WarpEditorInventory extends InventoryInterface {
                             if (value != null && !value.isEmpty()) {
                                 warp.setName(value);
                                 warp.save();
-                                user.sendMessage("&7Warp name changed to " + value + ".");
+                                user.sendMessage("&7&l> &7Warp name changed to " + value + ".");
                             }
                             this.open(user.getPlayer());
                         })
@@ -162,7 +162,7 @@ public class WarpEditorInventory extends InventoryInterface {
                             if (value != null) {
                                 warp.setDescription(value);
                                 warp.save();
-                                user.sendMessage("&7Warp description changed to \"" + value + "\".");
+                                user.sendMessage("&7&l> &7Warp description changed to \"" + value + "\".");
                             }
                             this.open(user.getPlayer());
                         })
@@ -178,7 +178,7 @@ public class WarpEditorInventory extends InventoryInterface {
                         "&7you are standing.")
                 .addSlot(32, 33)
                 .addAction((ClickAction) (user, type, inventory) -> {
-                    user.sendMessage("&7Warps location has been changed.");
+                    user.sendMessage("&7&l> &7Warps location has been changed.");
                     warp.setLocation(user.getPlayer().getLocation());
                     warp.save();
                     this.open(user.getPlayer());
@@ -196,12 +196,12 @@ public class WarpEditorInventory extends InventoryInterface {
                 .addAction(new ConfirmAction()
                         .setAnvilTitle("&8&lDelete " + warp.getName())
                         .setAbort(user -> {
-                            user.sendMessage("&7Aborted deleting warp.");
+                            user.sendMessage("&7&l> &7Aborted deleting warp.");
                             this.open(user.getPlayer());
                         })
                         .setConfirm(user -> {
                             CozyWarps.getInstance().removeWarp(user.getName(), warp.getName());
-                            user.sendMessage("&7Deleted warp " + warp.getName());
+                            user.sendMessage("&7&l> &7Deleted warp " + warp.getName());
                             new MyWarpsInventory(user.getUuid()).open(user.getPlayer());
                         })
                 )

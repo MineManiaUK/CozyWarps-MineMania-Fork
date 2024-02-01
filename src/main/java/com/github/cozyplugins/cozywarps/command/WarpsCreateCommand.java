@@ -1,19 +1,19 @@
 /*
- *     CozyWarps - Used to create player warps.
- *     Copyright (C) 2024 CozyPlugins
+ * CozyWarps - Used to create player warps.
+ * Copyright (C) 2024 CozyPlugins
  *
- *     This program is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *     You should have received a copy of the GNU General Public License
- *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.github.cozyplugins.cozywarps.command;
@@ -78,7 +78,7 @@ public class WarpsCreateCommand implements CommandType {
     public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
 
         if (arguments.getArguments().isEmpty() || arguments.getArguments().get(0).isEmpty()) {
-            user.sendMessage("&7Incorrect arguments, please provide a warp name. &f" + this.getSyntax());
+            user.sendMessage("&7&l> &7Incorrect arguments, please provide a warp name. &f" + this.getSyntax());
             return new CommandStatus();
         }
 
@@ -90,13 +90,13 @@ public class WarpsCreateCommand implements CommandType {
 
         // Check the warp's name.
         if (CozyWarps.getInstance().getWarp(user.getUuid(), name).isPresent()) {
-            user.sendMessage("&7You already have a warp with this name. Please use a different name.");
+            user.sendMessage("&7&l> &7You already have a warp with this name. Please use a different name.");
             return new CommandStatus();
         }
 
         // Check if the location is safe.
         if (!warp.isSafe()) {
-            user.sendMessage("&7This location is not safe for players to warp to.");
+            user.sendMessage("&7&l> &7This location is not safe for players to warp to.");
             user.sendMessage("&7- &fThe block below you should not be air.");
             return new CommandStatus();
         }
@@ -107,13 +107,13 @@ public class WarpsCreateCommand implements CommandType {
 
         // Check if the player can no longer buy any more warps.
         if (cost == -1) {
-            user.sendMessage("&7You already own the maximum amount of warps.");
+            user.sendMessage("&7&l> &7You already own the maximum amount of warps.");
             return new CommandStatus();
         }
 
         // Check if the player has enough money.
         if (user.getMoney() < cost) {
-            user.sendMessage("&7You do not have enough money to buy another warp. Another warp costs &f" + cost + " coins");
+            user.sendMessage("&7&l> &7You do not have enough money to buy another warp. Another warp costs &f" + cost + " coins");
             return new CommandStatus();
         }
 
@@ -125,7 +125,7 @@ public class WarpsCreateCommand implements CommandType {
                             playerUser.sendMessage("&7Aborted warp creation.");
                         })
                         .setConfirm(playerUser -> {
-                            playerUser.sendMessage("&7You have brought another warp for &f" + cost + " coins");
+                            playerUser.sendMessage("&7&l> &7You have brought another warp for &f" + cost + " coins");
 
                             // Create the warp credentials.
                             warp.setOwnerUuid(user.getUuid());
@@ -133,7 +133,7 @@ public class WarpsCreateCommand implements CommandType {
                             warp.save();
 
                             // Send the player a message.
-                            user.sendMessage("&7Created a new warp with name &f" + name + "&7.");
+                            user.sendMessage("&7&l> &7Created a new warp with name &f" + name + "&7.");
                         })
         );
         inventory.open(user.getPlayer());
