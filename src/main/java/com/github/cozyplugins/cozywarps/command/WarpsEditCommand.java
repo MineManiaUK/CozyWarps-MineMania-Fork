@@ -23,8 +23,6 @@ import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandStatus;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandSuggestions;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandTypePool;
-import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
-import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
 import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
@@ -38,10 +36,9 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.UUID;
 
-public class WarpsEditorCommand implements CommandType {
+public class WarpsEditCommand implements CommandType {
 
     @Override
     public @NotNull String getIdentifier() {

@@ -19,10 +19,15 @@
 package com.github.cozyplugins.cozywarps;
 
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
+import com.github.cozyplugins.cozylibrary.command.datatype.CommandStatus;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
+import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
+import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozywarps.command.WarpsCommand;
 import com.github.smuddgge.squishyconfiguration.ConfigurationFactory;
 import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -325,6 +330,70 @@ public final class CozyWarps extends CozyPlugin {
                 72000,
                 72000
         );
+    }
+
+    /**
+     * Used to create a warp.
+     * It will check before creating.
+     *
+     * @param user The instance of the user creating the warp.
+     * @param name The name of the warp.
+     * @param location The location of the warp.
+     */
+    public void createWarp(@NotNull PlayerUser user, @NotNull String name, @NotNull Location location) {
+
+        Warp warp = new Warp(UUID.randomUUID());
+        warp.setLocation(location);
+
+        // Check the warp's name.
+        if (CozyWarps.getInstance().getWarp(user.getUuid(), name).isPresent()) {
+            user.sendMessage("&7&l> &7You already have a warp with this name. Please use a different name.");
+            return;
+        }
+
+        // Check if the location is safe.
+        if (!warp.isSafe()) {
+            user.sendMessage("&7&l> &7This location is not safe for players to warp to.");
+            user.sendMessage("&7- &fThe block below you should not be air.");
+            return;
+        }
+
+        // Get the number of warps they own.
+        final int amountOfWarpsOwned = CozyWarps.getInstance().getAmountOwned(user.getUuid());
+        final int cost = CozyWarps.getInstance().getPrice(amountOfWarpsOwned + 1);
+
+        // Check if the player can no longer buy any more warps.
+        if (cost == -1) {
+            user.sendMessage("&7&l> &7You already own the maximum amount of warps.");
+            return;
+        }
+
+        // Check if the player has enough money.
+        if (user.getMoney() < cost) {
+            user.sendMessage("&7&l> &7You do not have enough money to buy another warp. Another warp costs &f" + cost + " coins");
+            return;
+        }
+
+        // Create a configuration menu.
+        ConfirmationInventory inventory = new ConfirmationInventory(
+                new ConfirmAction()
+                        .setAnvilTitle("&7&lBuy for &8&l" + cost + " coins")
+                        .setAbort(playerUser -> {
+                            playerUser.sendMessage("&7Aborted warp creation.");
+                        })
+                        .setConfirm(playerUser -> {
+                            playerUser.sendMessage("&7&l> &7You have brought another warp for &f" + cost + " coins");
+
+                            // Create the warp credentials.
+                            warp.setOwnerUuid(user.getUuid());
+                            warp.setName(name);
+                            warp.save();
+
+                            // Send the player a message.
+                            user.sendMessage("&7&l> &7Created a new warp with name &f" + name + "&7.");
+                        })
+        );
+        inventory.open(user.getPlayer());
     }
 
     /**

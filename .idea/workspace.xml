@@ -5,26 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2564f889-68e2-4085-be24-2a9d4ec2eea5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copyright/CozyWarps.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copyright/CozyWarps.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/graphics/warps.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/player_warps.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/CozyWarps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/CozyWarps.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/Warp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/Warp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/WarpVisit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/WarpVisit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsBanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsBanCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsDeleteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsDeleteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsEditorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsEditorCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsUnBanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsUnBanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/package-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/indicator/LocationConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/indicator/LocationConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/MyWarpsInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/MyWarpsInventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/WarpEditorInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/WarpEditorInventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsEditorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsEditCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/WarpsInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/WarpsInventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/cozyplugins/cozywarps/inventory/package-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/CozyWarps-1.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/CozyWarps-1.0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-CozyWarps-1.0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-CozyWarps-1.0.1.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -111,6 +104,7 @@
             </option>
             <option name="goals">
               <list>
+                <option value="clean" />
                 <option value="package" />
               </list>
             </option>
@@ -169,6 +163,8 @@
       <workItem from="1706463407646" duration="606000" />
       <workItem from="1706540669443" duration="12000" />
       <workItem from="1706650220849" duration="204000" />
+      <workItem from="1707151475341" duration="11000" />
+      <workItem from="1707252498221" duration="1373000" />
     </task>
     <servers />
   </component>

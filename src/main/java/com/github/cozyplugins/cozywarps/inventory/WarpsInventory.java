@@ -18,16 +18,25 @@
 
 package com.github.cozyplugins.cozywarps.inventory;
 
+import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.AnvilValueAction;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
+import com.github.cozyplugins.cozylibrary.inventory.inventory.AnvilInputInventory;
+import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozywarps.CozyWarps;
 import com.github.cozyplugins.cozywarps.Warp;
 import com.github.cozyplugins.cozywarps.WarpVisit;
+import com.github.cozyplugins.cozywarps.command.WarpsCreateCommand;
+import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -50,6 +59,33 @@ public class WarpsInventory extends InventoryInterface {
     @Override
     protected void onGenerate(PlayerUser player) {
 
+        final int amountOfWarpsOwned = CozyWarps.getInstance().getAmountOwned(player.getUuid());
+        final int cost = CozyWarps.getInstance().getPrice(amountOfWarpsOwned + 1);
+
+        // Create button.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.PINK_STAINED_GLASS_PANE)
+                .setCustomModelData(1)
+                .setName("&a&lCreate")
+                .setLore("&7Click to create a warp",
+                        "&7where you are standing.",
+                        "&7",
+                        "&aCost &f{0} coins"
+                                .replace("{0}", Integer.toString(cost))
+                )
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lWarp Name")
+                        .setAction((value, user) -> {
+                            if (value == null) {
+                                user.sendMessage("&7&l> &7Aborted warp creation.");
+                                return;
+                            }
+                            CozyWarps.getInstance().createWarp(user, value, user.getPlayer().getLocation());
+                        })
+                )
+                .addSlot(45, 46, 47)
+        );
+
         // Help button.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.PINK_STAINED_GLASS_PANE)
@@ -62,10 +98,12 @@ public class WarpsInventory extends InventoryInterface {
                         "&a/warps create <name> &fTo create a warp.",
                         "&a/warps delete <name> &fTo delete a warp.",
                         "&a/warps edit <name> &fTo edit a warp.",
+                        "&a/warps ban <player> &fTo ban a player from your warps.",
+                        "&a/warps unban <player> &fTo unban a player from your warps.",
                         "&7",
                         "&7Visits are counted as every unique player",
                         "&7visiting your warp every hour.")
-                .addSlot(45, 46, 47)
+                .addSlot(49)
         );
 
         // My warp's button.
