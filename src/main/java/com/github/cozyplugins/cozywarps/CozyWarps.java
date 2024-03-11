@@ -382,6 +382,7 @@ public final class CozyWarps extends CozyPlugin {
                             playerUser.sendMessage("&7Aborted warp creation.");
                         })
                         .setConfirm(playerUser -> {
+                            playerUser.removeMoney(cost);
                             playerUser.sendMessage("&7&l> &7You have brought another warp for &f" + cost + " coins");
 
                             // Create the warp credentials.
