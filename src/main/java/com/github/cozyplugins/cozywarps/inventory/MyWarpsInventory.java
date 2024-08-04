@@ -46,7 +46,7 @@ public class MyWarpsInventory extends InventoryInterface {
      * @param ownerUuid The warp's owner.
      */
     public MyWarpsInventory(@NotNull UUID ownerUuid) {
-        super(54, "&f₴₴₴₴₴₴₴₴▶");
+        super(54, "&f₴₴₴₴₴₴₴₴홮");
 
         this.ownerUuid = ownerUuid;
     }
