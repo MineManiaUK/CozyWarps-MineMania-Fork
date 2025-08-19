@@ -32,6 +32,7 @@ import com.github.cozyplugins.cozywarps.Warp;
 import com.github.cozyplugins.cozywarps.WarpVisit;
 import com.github.cozyplugins.cozywarps.command.WarpsCreateCommand;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,8 +60,9 @@ public class WarpsInventory extends InventoryInterface {
     @Override
     protected void onGenerate(PlayerUser player) {
 
-        final int amountOfWarpsOwned = CozyWarps.getInstance().getAmountOwned(player.getUuid());
-        final int cost = CozyWarps.getInstance().getPrice(amountOfWarpsOwned + 1);
+        clearPageContents();
+
+        final int cost = CozyWarps.getInstance().getPrice(player.getPlayer());
 
         // Create button.
         this.setItem(new InventoryItem()
@@ -118,41 +120,46 @@ public class WarpsInventory extends InventoryInterface {
                 })
         );
 
-        // Back arrow.
+        // Back/Previous arrow (slot 48)
         this.setItem(new InventoryItem()
                 .setMaterial(Material.PINK_STAINED_GLASS_PANE)
                 .setCustomModelData(1)
-                .setName("&a&lLast Page")
-                .setLore("&7Click to go to the page after.",
+                .setName("&c&lPrevious Page")
+                .setLore("&7Go to the previous page.",
                         "&7",
-                        "&fCurrent Page &a" + this.page)
+                        "&fCurrent Page &a" + (this.page + 1) + "/" + (this.getMaxPages() + 1))
                 .addSlot(48)
                 .addAction((ClickAction) (user, type, inventory) -> {
-                    if (this.page == 0) return;
-                    this.page += 1;
+                    if (this.page <= 0) return;
+                    this.page -= 1;
                     this.onGenerate(player);
                 })
         );
 
-        // Next arrow.
+// Next arrow (slot 50)
         this.setItem(new InventoryItem()
                 .setMaterial(Material.PINK_STAINED_GLASS_PANE)
                 .setCustomModelData(1)
                 .setName("&a&lNext Page")
-                .setLore("&7Click to go to the page after.",
+                .setLore("&7Go to the next page.",
                         "&7",
-                        "&fCurrent Page &a" + this.page)
+                        "&fCurrent Page &a" + (this.page + 1) + "/" + (this.getMaxPages() + 1))
                 .addSlot(50)
                 .addAction((ClickAction) (user, type, inventory) -> {
-                    if (this.getMaxPages() == this.page) return;
-                    this.page -= 1;
+                    if (this.page >= this.getMaxPages()) return;
+                    this.page += 1;
                     this.onGenerate(player);
                 })
         );
 
         // Add all the warps.
         this.addAllWarps(player);
+
+
     }
+
+
+
 
     /**
      * Used to add all the warps to the inventory given
@@ -192,23 +199,69 @@ public class WarpsInventory extends InventoryInterface {
                     .addSlot(warpNumber % 45);
 
             // Check if the player is banned.
-            if (CozyWarps.getInstance().isBanned(player.getUuid(), warp.getOwnerUuid())) {
+            if (CozyWarps.getInstance().isBanned(player.getUuid(), warp.getManagerUuid())) {
                 item.setLore("&7You are banned from this warp.");
             } else {
                 item.addAction((ClickAction) (user, type, inventory) -> {
-                    player.sendMessage("&7&l> &7Teleporting to " + warp.getName() + "...");
-                    warp.teleport(player);
+                    if (type.isLeftClick()) {
+                        if (!type.isShiftClick()) {
+                            player.sendMessage("&7&l> &7Teleporting to " + warp.getName() + "...");
+                            warp.teleport(player, true);
 
-                    if (!CozyWarps.getInstance().hasVisited(warp.getIdentifier(), user.getUuid())) {
+                            if (!CozyWarps.getInstance().hasVisited(warp.getIdentifier(), user.getUuid())) {
 
-                        // Add a warp visit to the recent list.
-                        CozyWarps.getInstance().addWarpVisit(
-                                new WarpVisit(warp.getIdentifier(), user.getUuid())
-                        );
+                                // Add a warp visit to the recent list.
+                                CozyWarps.getInstance().addWarpVisit(
+                                        new WarpVisit(warp.getIdentifier(), user.getUuid())
+                                );
 
-                        // Increment the number of times visited.
-                        warp.incrementVisits();
-                        warp.save();
+                                // Increment the number of times visited.
+                                warp.incrementVisits();
+                                warp.save();
+                            }
+                        }
+                        else{
+                            if (player.hasPermission("cozywarps.ignore.safety")) {
+                                player.sendMessage(ChatColor.RED + "&l> &cIGNORING WARP SAFETY");
+                                player.sendMessage("&7&l> &7Teleporting to " + warp.getName() + "...");
+                                warp.teleport(player, false);
+
+                                if (!CozyWarps.getInstance().hasVisited(warp.getIdentifier(), user.getUuid())) {
+
+                                    // Add a warp visit to the recent list.
+                                    CozyWarps.getInstance().addWarpVisit(
+                                            new WarpVisit(warp.getIdentifier(), user.getUuid())
+                                    );
+
+                                    // Increment the number of times visited.
+                                    warp.incrementVisits();
+                                    warp.save();
+                                }
+                            }
+                        }
+                    }
+                    else if (type.isRightClick()) {
+
+                        if (user.hasPermission("cozywarps.staff.edit")){
+                            new WarpEditorInventory(warp.getIdentifier()).open(user.getPlayer());
+                        }
+                        else{
+                            player.sendMessage("&7&l> &7Teleporting to " + warp.getName() + "...");
+                            warp.teleport(player, true);
+
+                            if (!CozyWarps.getInstance().hasVisited(warp.getIdentifier(), user.getUuid())) {
+
+                                // Add a warp visit to the recent list.
+                                CozyWarps.getInstance().addWarpVisit(
+                                        new WarpVisit(warp.getIdentifier(), user.getUuid())
+                                );
+
+                                // Increment the number of times visited.
+                                warp.incrementVisits();
+                                warp.save();
+                            }
+                        }
+
                     }
                 });
             }
@@ -222,11 +275,23 @@ public class WarpsInventory extends InventoryInterface {
     }
 
     /**
-     * Used to get the maximum number of pages.
-     *
-     * @return The maximum number of pages.
+     * @return the last valid page index (zero-based)
      */
     public int getMaxPages() {
-        return CozyWarps.getInstance().getAllWarps().size() / 45;
+        int total = CozyWarps.getInstance().getAllWarps().size();
+        if (total <= 0) return 0;
+        int totalPages = (int) Math.ceil(total / 45.0);
+        return totalPages - 1; // last index
     }
+
+    private void clearPageContents() {
+        for (int i = 0; i < 45; i++) {
+            // Setting AIR (null under the hood) clears the slot in Bukkit.
+            this.setItem(new InventoryItem()
+                    .setMaterial(Material.AIR)
+                    .addSlot(i));
+        }
+    }
+
+
 }

@@ -68,7 +68,7 @@ public class WarpsEditCommand implements CommandType {
 
             // Create the base suggestions.
             CommandSuggestions suggestions = new CommandSuggestions()
-                    .append(CozyWarps.getInstance().getOwnerNames());
+                    .append(CozyWarps.getInstance().getManagerNames());
 
             // Add the players warps.
             if (!arguments.getArguments().isEmpty() && !arguments.getArguments().get(0).isEmpty()) {

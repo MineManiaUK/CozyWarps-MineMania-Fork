@@ -1,15 +1,15 @@
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/inventory/WarpEditorInventory.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/CozyWarps.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsDeleteCommand.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCommand.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/inventory/MyWarpsInventory.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/indicator/LocationConverter.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/package-info.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/WarpVisit.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsBanCommand.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/Warp.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/inventory/package-info.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsCreateCommand.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/inventory/WarpsInventory.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsUnBanCommand.java
-/Users/joshuasmith/Library/CloudStorage/Dropbox/Responsorys/CozyPlugins/CozyWarps/src/main/java/com/github/cozyplugins/cozywarps/command/WarpsEditCommand.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\command\package-info.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\command\WarpsCreateCommand.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\inventory\package-info.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\Warp.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\command\WarpsUnBanCommand.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\command\WarpsCommand.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\command\WarpsBanCommand.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\inventory\WarpsInventory.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\indicator\LocationConverter.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\CozyWarps.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\inventory\MyWarpsInventory.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\command\WarpsDeleteCommand.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\inventory\WarpEditorInventory.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\command\WarpsEditCommand.java
+L:\Minecraft\Minemania Plugins\CozyWarps-MineMania-Fork\src\main\java\com\github\cozyplugins\cozywarps\WarpVisit.java

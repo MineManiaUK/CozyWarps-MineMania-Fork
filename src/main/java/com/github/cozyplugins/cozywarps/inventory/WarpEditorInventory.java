@@ -27,6 +27,8 @@ import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozywarps.CozyWarps;
 import com.github.cozyplugins.cozywarps.Warp;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -171,12 +173,12 @@ public class WarpEditorInventory extends InventoryInterface {
 
         // Location button.
         this.setItem(new InventoryItem()
-                .setMaterial(Material.PINK_STAINED_GLASS_PANE)
-                .setCustomModelData(1)
+                .setMaterial(Material.COMPASS)
+                .setCustomModelData(0)
                 .setName("&6&lChange Warp Location")
                 .setLore("&7Change the warp location to where",
                         "&7you are standing.")
-                .addSlot(32, 33)
+                .addSlot(32)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     user.sendMessage("&7&l> &7Warps location has been changed.");
                     warp.setLocation(user.getPlayer().getLocation());
@@ -184,6 +186,35 @@ public class WarpEditorInventory extends InventoryInterface {
                     this.open(user.getPlayer());
                 })
         );
+
+        // Manager Button
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setCustomModelData(0)
+                .setName("&c&lTransfer Management")
+                .setLore("&7Click to change the warps manager",
+                        "&7 you will not be refunded")
+                .addSlot(33)
+                .addAction(new AnvilValueAction()
+                                .setAnvilTitle("New Warp Owner")
+                        .setAction((value, user) -> {
+                            if (value != null){
+                                if(Bukkit.getPlayer(value) != null){
+                                    UUID newManagerUuid = Bukkit.getOfflinePlayer(value).getUniqueId();
+                                    warp.setManagerUuid(newManagerUuid);
+                                    warp.save();
+                                }
+                                else{
+                                    user.sendMessage(ChatColor.RED + "Player Not Valid or offline!");
+                                }
+                            }
+                        })
+                )
+        );
+
+
+
+
 
         // Delete button.
         this.setItem(new InventoryItem()

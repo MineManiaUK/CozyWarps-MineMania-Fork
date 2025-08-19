@@ -43,7 +43,8 @@ import java.util.UUID;
 public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, Savable, Comparable<Warp>, LocationConverter {
 
     private final @NotNull UUID identifier;
-    private @NotNull UUID ownerUuid;
+    private @NotNull UUID creatorUuid;
+    private @NotNull UUID managerUuid;
     private @NotNull String name;
     private @Nullable String description;
     private @NotNull Material material;
@@ -58,7 +59,8 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      */
     public Warp(@NotNull UUID identifier) {
         this.identifier = identifier;
-        this.ownerUuid = UUID.randomUUID();
+        this.creatorUuid = UUID.randomUUID();
+        this.managerUuid = UUID.randomUUID();
         this.name = "null";
         this.material = Material.COMPASS;
     }
@@ -73,21 +75,41 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     }
 
     /**
-     * Used to get the owner's uuid.
+     * Used to get the creator's uuid.
      *
-     * @return The owner's uuid.
+     * @return The creator's uuid.
      */
-    public @NotNull UUID getOwnerUuid() {
-        return this.ownerUuid;
+    public @NotNull UUID getCreatorUuid() {
+        return this.creatorUuid;
     }
 
     /**
-     * Used to get the owner's name.
+     * Used to get the creator's name.
      *
-     * @return The owner's name.
+     * @return The creator's name.
      */
-    public @NotNull String getOwnerName() {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(this.ownerUuid);
+    public @NotNull String getCreatorName() {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(this.creatorUuid);
+        if (player.getName() == null) return "Null";
+        return player.getName();
+    }
+
+    /**
+     * Used to get the manager's uuid.
+     *
+     * @return The manager's uuid.
+     */
+    public @NotNull UUID getManagerUuid() {
+        return this.managerUuid;
+    }
+
+    /**
+     * Used to get the manager's name.
+     *
+     * @return The manager's name.
+     */
+    public @NotNull String getManagerName() {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(this.managerUuid);
         if (player.getName() == null) return "Null";
         return player.getName();
     }
@@ -145,13 +167,24 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     }
 
     /**
-     * Used to set the owner's uuid.
+     * Used to set the creator's uuid.
      *
-     * @param ownerUuid The owner's uuid.
+     * @param creatorUuid The creator's uuid.
      * @return This instance.
      */
-    public @NotNull Warp setOwnerUuid(@NotNull UUID ownerUuid) {
-        this.ownerUuid = ownerUuid;
+    public @NotNull Warp setCreatorUuid(@NotNull UUID creatorUuid) {
+        this.creatorUuid = creatorUuid;
+        return this;
+    }
+
+    /**
+     * Used to set the creator's uuid.
+     *
+     * @param managerUuid The manager's uuid.
+     * @return This instance.
+     */
+    public @NotNull Warp setManagerUuid(@NotNull UUID managerUuid) {
+        this.managerUuid = managerUuid;
         return this;
     }
 
@@ -279,7 +312,8 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
                     .setLore("&8&l&m------------",
                             "&f" + this.description,
                             "&7",
-                            "&fOwner &a" + this.getOwnerName(),
+                            "&fManager &a" + this.getManagerName(),
+                            "&fCreator &a" + this.getCreatorName(),
                             "&fVisits &a" + this.visits);
         }
 
@@ -287,7 +321,8 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
                 .setMaterial(this.material)
                 .setName("&e&l" + this.name)
                 .setLore("&8&l&m------------",
-                        "&fOwner &a" + this.getOwnerName(),
+                        "&fManager &a" + this.getManagerName(),
+                        "&fCreator &a" + this.getCreatorName(),
                         "&fVisits &a" + this.visits);
     }
 
@@ -297,12 +332,14 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      * @param player The instance of the player to teleport.
      * @return This instance.
      */
-    public @NotNull Warp teleport(PlayerUser player) {
+    public @NotNull Warp teleport(PlayerUser player, Boolean checkSafe) {
 
         // Check if the location is safe.
-        if (!this.isSafe()) {
-            player.sendMessage("&7&l> &7Teleportation failed, warp location is unsafe.");
-            return this;
+        if (checkSafe){
+            if (!this.isSafe()) {
+                player.sendMessage("&7&l> &7Teleportation failed, warp location is unsafe.");
+                return this;
+            }
         }
 
         assert this.location != null;
@@ -314,7 +351,8 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     public @NotNull ConfigurationSection convert() {
         ConfigurationSection section = new MemoryConfigurationSection(new LinkedHashMap<>());
 
-        section.set("owner", this.ownerUuid.toString());
+        section.set("creator", this.creatorUuid.toString());
+        section.set("manager", this.managerUuid.toString());
         section.set("name", this.name);
         section.set("description", this.description);
         section.set("material", this.material.toString());
@@ -327,7 +365,8 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
     @Override
     public @NotNull Warp convert(ConfigurationSection section) {
 
-        this.ownerUuid = UUID.fromString(section.getString("owner"));
+        this.creatorUuid = UUID.fromString(section.getString("creator"));
+        this.managerUuid = UUID.fromString(section.getString("manager"));
         this.name = section.getString("name", "null");
         this.description = section.getString("description");
         this.setMaterialAsString(section.getString("material", "COMPASS"));

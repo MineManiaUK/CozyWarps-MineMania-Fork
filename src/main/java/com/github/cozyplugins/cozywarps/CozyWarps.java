@@ -19,7 +19,6 @@
 package com.github.cozyplugins.cozywarps;
 
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
-import com.github.cozyplugins.cozylibrary.command.datatype.CommandStatus;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
 import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
@@ -28,6 +27,7 @@ import com.github.smuddgge.squishyconfiguration.ConfigurationFactory;
 import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -89,11 +89,25 @@ public final class CozyWarps extends CozyPlugin {
     /**
      * Used to get the price a warp would cost.
      *
-     * @param warpNumber The number warp they are buying.
      * @return The price of the warp.
      */
-    public int getPrice(int warpNumber) {
-        return this.config.getInteger("warp." + warpNumber, -1);
+    public int getPrice(Player player) {
+
+        if (player.hasPermission("cozywarps.createfee.bypass")){
+            return 0;
+        }
+        else{
+            return this.config.getInteger("warpcost");
+        }
+    }
+
+    /**
+     * Used to get the max amount of warps per player
+     *
+     * @return The max amount of warps per player
+     */
+    public int getMaxWarps(){
+        return  this.config.getInteger("maxwarps");
     }
 
     /**
@@ -121,7 +135,7 @@ public final class CozyWarps extends CozyPlugin {
      */
     public @NotNull Optional<Warp> getWarp(@NotNull UUID playerUuid, @NotNull String warpName) {
         for (Warp warp : this.getAllWarps()) {
-            if (!warp.getOwnerUuid().equals(playerUuid)) continue;
+            if (!warp.getManagerUuid().equals(playerUuid)) continue;
             if (!warp.getName().equals(warpName)) continue;
             return Optional.of(warp);
         }
@@ -153,7 +167,7 @@ public final class CozyWarps extends CozyPlugin {
     public @NotNull List<Warp> getAllWarps(@NotNull UUID playerUuid) {
         List<Warp> list = new ArrayList<>();
         for (Warp warp : this.getAllWarps()) {
-            if (warp.getOwnerUuid().equals(playerUuid)) list.add(warp);
+            if (warp.getManagerUuid().equals(playerUuid)) list.add(warp);
         }
         return list;
     }
@@ -167,7 +181,7 @@ public final class CozyWarps extends CozyPlugin {
     public int getAmountOwned(@NotNull UUID uuid) {
         int amountOwned = 0;
         for (Warp warp : this.getAllWarps()) {
-            if (warp.getOwnerUuid().equals(uuid)) amountOwned++;
+            if (warp.getManagerUuid().equals(uuid)) amountOwned++;
         }
         return amountOwned;
     }
@@ -177,11 +191,11 @@ public final class CozyWarps extends CozyPlugin {
      *
      * @return The names of the warp owners.
      */
-    public @NotNull List<String> getOwnerNames() {
+    public @NotNull List<String> getManagerNames() {
         List<String> list = new ArrayList<>();
         for (Warp warp : this.getAllWarps()) {
-            if (list.contains(warp.getOwnerName())) continue;
-            list.add(warp.getOwnerName());
+            if (list.contains(warp.getManagerName())) continue;
+            list.add(warp.getManagerName());
         }
         return list;
     }
@@ -275,10 +289,8 @@ public final class CozyWarps extends CozyPlugin {
         for (Warp warp : this.getAllWarps()) {
 
             // Check the credentials.
-            if (!Bukkit.getOfflinePlayer(playerName).getUniqueId().equals(warp.getOwnerUuid())) continue;
+            if (!Bukkit.getOfflinePlayer(playerName).getUniqueId().equals(warp.getManagerUuid())) continue;
             if (!warpName.equals(warp.getName())) continue;
-
-            System.out.println("a");
 
             this.warpConfig.set(warp.getIdentifier().toString(), null);
             this.warpConfig.save();
@@ -358,12 +370,11 @@ public final class CozyWarps extends CozyPlugin {
             return;
         }
 
-        // Get the number of warps they own.
-        final int amountOfWarpsOwned = CozyWarps.getInstance().getAmountOwned(user.getUuid());
-        final int cost = CozyWarps.getInstance().getPrice(amountOfWarpsOwned + 1);
+        // Get the warp cost
+        final int cost = CozyWarps.getInstance().getPrice(user.getPlayer());
 
         // Check if the player can no longer buy any more warps.
-        if (cost == -1) {
+        if (getAmountOwned(user.getUuid()) >= getMaxWarps()) {
             user.sendMessage("&7&l> &7You already own the maximum amount of warps.");
             return;
         }
@@ -386,7 +397,8 @@ public final class CozyWarps extends CozyPlugin {
                             playerUser.sendMessage("&7&l> &7You have brought another warp for &f" + cost + " coins");
 
                             // Create the warp credentials.
-                            warp.setOwnerUuid(user.getUuid());
+                            warp.setCreatorUuid(user.getUuid());
+                            warp.setManagerUuid(user.getUuid());
                             warp.setName(name);
                             warp.save();
 
