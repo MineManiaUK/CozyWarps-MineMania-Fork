@@ -221,7 +221,7 @@ public class WarpsInventory extends InventoryInterface {
                             }
                         }
                         else{
-                            if (player.hasPermission("cozywarps.ignore.safety")) {
+                            if (player.hasPermission("cozywarps.bypass.safety")) {
                                 player.sendMessage(ChatColor.RED + "&l> &cIGNORING WARP SAFETY");
                                 player.sendMessage("&7&l> &7Teleporting to " + warp.getName() + "...");
                                 warp.teleport(player, false);

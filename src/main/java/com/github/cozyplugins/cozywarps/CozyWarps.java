@@ -93,7 +93,7 @@ public final class CozyWarps extends CozyPlugin {
      */
     public int getPrice(Player player) {
 
-        if (player.hasPermission("cozywarps.createfee.bypass")){
+        if (player.hasPermission("cozywarps.bypass.createfee")){
             return 0;
         }
         else{
