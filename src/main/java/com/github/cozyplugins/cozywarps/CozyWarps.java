@@ -289,7 +289,9 @@ public final class CozyWarps extends CozyPlugin {
         for (Warp warp : this.getAllWarps()) {
 
             // Check the credentials.
-            if (!Bukkit.getOfflinePlayer(playerName).getUniqueId().equals(warp.getManagerUuid())) continue;
+            if (Bukkit.getOfflinePlayer(playerName).getPlayer().hasPermission("cozywarps.staff.delete")){
+                if (!Bukkit.getOfflinePlayer(playerName).getUniqueId().equals(warp.getManagerUuid())) continue;
+            }
             if (!warpName.equals(warp.getName())) continue;
 
             this.warpConfig.set(warp.getIdentifier().toString(), null);

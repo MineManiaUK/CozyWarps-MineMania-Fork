@@ -18,6 +18,7 @@
 
 package com.github.cozyplugins.cozywarps.inventory;
 
+import com.github.cozyplugins.cozylibrary.CozyLibrary;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
@@ -32,11 +33,20 @@ import com.github.cozyplugins.cozywarps.Warp;
 import com.github.cozyplugins.cozywarps.WarpVisit;
 import com.github.cozyplugins.cozywarps.command.WarpsCreateCommand;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.http.WebSocket;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,7 +54,7 @@ import java.util.List;
  * Represents the warp's inventory.
  * Contains a list of all the possible warps.
  */
-public class WarpsInventory extends InventoryInterface {
+public class WarpsInventory extends InventoryInterface implements Listener {
 
     private int page;
 
@@ -102,6 +112,10 @@ public class WarpsInventory extends InventoryInterface {
                         "&a/warps edit <name> &fTo edit a warp.",
                         "&a/warps ban <player> &fTo ban a player from your warps.",
                         "&a/warps unban <player> &fTo unban a player from your warps.",
+                        "&7",
+                        "&c&lPlease Note: &r&7Warps belong to the community, not the creators. ",
+                        "&7Server staff may change warp management",
+                        "&7if it is in the best interest of the community.",
                         "&7",
                         "&7Visits are counted as every unique player",
                         "&7visiting your warp every hour.")
@@ -225,6 +239,7 @@ public class WarpsInventory extends InventoryInterface {
                                 player.sendMessage(ChatColor.RED + "&l> &cIGNORING WARP SAFETY");
                                 player.sendMessage("&7&l> &7Teleporting to " + warp.getName() + "...");
                                 warp.teleport(player, false);
+                                Bukkit.getScheduler().runTask(CozyWarps.getInstance(), user.getPlayer()::updateInventory);
 
                                 if (!CozyWarps.getInstance().hasVisited(warp.getIdentifier(), user.getUuid())) {
 
@@ -292,6 +307,4 @@ public class WarpsInventory extends InventoryInterface {
                     .addSlot(i));
         }
     }
-
-
 }

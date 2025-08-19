@@ -1,21 +1,3 @@
-/*
- * CozyWarps - Used to create player warps.
- * Copyright (C) 2024 CozyPlugins
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package com.github.cozyplugins.cozywarps.inventory;
 
 import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
@@ -25,36 +7,38 @@ import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozywarps.CozyWarps;
 import com.github.cozyplugins.cozywarps.Warp;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Represents my warp's inventory.
- * Shows a player's warps with an option to edit them.
+ * Shows a player's warps with an option to edit them, with paging.
  */
 public class MyWarpsInventory extends InventoryInterface {
 
     private final @NotNull UUID ownerUuid;
+    private int page = 0;
 
-    /**
-     * Used to create an instance of the player warp's in
-     * an interactive inventory.
-     *
-     * @param ownerUuid The warp's owner.
-     */
+    // Item slots to use per page: 7 on row 2 (10–16) and 8 on row 3 (18–25)
+    private static final int[] PAGE_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            18, 19, 20, 21, 22, 23, 24, 25
+    };
+
     public MyWarpsInventory(@NotNull UUID ownerUuid) {
         super(54, "&f₴₴₴₴₴₴₴₴홮");
-
         this.ownerUuid = ownerUuid;
     }
 
     @Override
     protected void onGenerate(PlayerUser player) {
+        // --- Static controls ---
 
-        // Back button.
+        // Back to main warps menu
         this.setItem(new InventoryItem()
                 .setMaterial(Material.PINK_STAINED_GLASS_PANE)
                 .setCustomModelData(1)
@@ -66,7 +50,7 @@ public class MyWarpsInventory extends InventoryInterface {
                 })
         );
 
-        // Help button.
+        // Help
         this.setItem(new InventoryItem()
                 .setMaterial(Material.PINK_STAINED_GLASS_PANE)
                 .setCustomModelData(1)
@@ -84,34 +68,73 @@ public class MyWarpsInventory extends InventoryInterface {
                 .addSlot(46, 47, 48)
         );
 
-        // Add warps.
-        this.addWarpItems();
+        // Collect and sort the owner's warps once for this render
+        List<Warp> warps = new ArrayList<>(CozyWarps.getInstance().getAllWarps(this.ownerUuid));
+        Collections.sort(warps);
+
+        int maxPageIndex = getMaxPageIndex(warps.size());
+        if (page > maxPageIndex) page = maxPageIndex; // clamp if needed
+
+        // Prev page
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.PINK_STAINED_GLASS_PANE)
+                .setCustomModelData(1)
+                .setName("&a&lPrevious Page")
+                .setLore("&7Click to go back a page.",
+                        "&7",
+                        "&fPage &a" + (page + 1) + "&7/&a" + Math.max(1, maxPageIndex + 1))
+                .addSlot(50)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (page > 0) {
+                        page -= 1;
+                        this.onGenerate(player);
+                    }
+                })
+        );
+
+        // Next page
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.PINK_STAINED_GLASS_PANE)
+                .setCustomModelData(1)
+                .setName("&a&lNext Page")
+                .setLore("&7Click to go forward a page.",
+                        "&7",
+                        "&fPage &a" + (page + 1) + "&7/&a" + Math.max(1, maxPageIndex + 1))
+                .addSlot(52)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (page < maxPageIndex) {
+                        page += 1;
+                        this.onGenerate(player);
+                    }
+                })
+        );
+
+        // --- Page contents ---
+        addWarpItemsPaged(warps);
     }
 
-    /**
-     * Used to add the warp items that
-     * the owner owns.
-     */
-    public void addWarpItems() {
+    private void addWarpItemsPaged(List<Warp> warps) {
+        final int perPage = PAGE_SLOTS.length;
+        final int start = page * perPage;
+        final int end = Math.min(start + perPage, warps.size());
 
-        int slot = 10;
-
-        for (Warp warp : CozyWarps.getInstance().getAllWarps(this.ownerUuid)) {
+        for (int i = start, slotIndex = 0; i < end; i++, slotIndex++) {
+            final Warp warp = warps.get(i);
 
             InventoryItem item = warp.createInventoryItem();
             item.addLore("&7");
             item.addLore("&eClick to edit this warp.");
-            item.addSlot(slot);
-            item.addAction((ClickAction) (user, type, inventory) -> {
-               new WarpEditorInventory(warp.getIdentifier()).open(user.getPlayer());
-            });
+            item.addSlot(PAGE_SLOTS[slotIndex]);
+            item.addAction((ClickAction) (user, type, inventory) ->
+                    new WarpEditorInventory(warp.getIdentifier()).open(user.getPlayer())
+            );
 
-            // Add the item to the inventory.
             this.setItem(item);
-
-            if (slot > 25) return;
-            if (slot == 16) slot = 18;
-            slot++;
         }
+    }
+
+    private int getMaxPageIndex(int total) {
+        if (total <= 0) return 0;
+        return (total - 1) / PAGE_SLOTS.length;
     }
 }
