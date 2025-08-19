@@ -1,3 +1,4 @@
-# CozyWarps
-Used to create player warps.
+# CozyWarps MineMania Fork
+
+Used to create player warps
 
