@@ -26,7 +26,7 @@ public class MyWarpsInventory extends InventoryInterface {
     // Item slots to use per page: 7 on row 2 (10–16) and 8 on row 3 (18–25)
     private static final int[] PAGE_SLOTS = {
             10, 11, 12, 13, 14, 15, 16,
-            18, 19, 20, 21, 22, 23, 24, 25
+            19, 20, 21, 22, 23, 24, 25
     };
 
     public MyWarpsInventory(@NotNull UUID ownerUuid) {
@@ -36,7 +36,8 @@ public class MyWarpsInventory extends InventoryInterface {
 
     @Override
     protected void onGenerate(PlayerUser player) {
-        // --- Static controls ---
+
+        clearPageContents();
 
         // Back to main warps menu
         this.setItem(new InventoryItem()
@@ -61,7 +62,12 @@ public class MyWarpsInventory extends InventoryInterface {
                         "&a/warps &fTo list all warps.",
                         "&a/warps create <name> &fTo create a warp.",
                         "&a/warps delete <name> &fTo delete a warp.",
-                        "&a/warps edit <name> &fTo edit a warp.",
+                        "&a/warps ban <player> &fTo ban a player from your warps.",
+                        "&a/warps unban <player> &fTo unban a player from your warps.",
+                        "&7",
+                        "&c&lPlease Note: &r&7Warps belong to the community, not the creators. ",
+                        "&7Server staff may change warp management",
+                        "&7if it is in the best interest of the community.",
                         "&7",
                         "&7Visits are counted as every unique player",
                         "&7visiting your warp every hour.")
@@ -100,7 +106,7 @@ public class MyWarpsInventory extends InventoryInterface {
                 .setLore("&7Click to go forward a page.",
                         "&7",
                         "&fPage &a" + (page + 1) + "&7/&a" + Math.max(1, maxPageIndex + 1))
-                .addSlot(52)
+                .addSlot(51)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (page < maxPageIndex) {
                         page += 1;
@@ -136,5 +142,14 @@ public class MyWarpsInventory extends InventoryInterface {
     private int getMaxPageIndex(int total) {
         if (total <= 0) return 0;
         return (total - 1) / PAGE_SLOTS.length;
+    }
+
+    private void clearPageContents() {
+        for (int i = 0; i < 45; i++) {
+            // Setting AIR (null under the hood) clears the slot in Bukkit.
+            this.setItem(new InventoryItem()
+                    .setMaterial(Material.AIR)
+                    .addSlot(i));
+        }
     }
 }

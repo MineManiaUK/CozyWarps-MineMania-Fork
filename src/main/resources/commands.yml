@@ -17,7 +17,3 @@ warps:
   unban:
     enabled: true
     name: "unban"
-
-  editor:
-    enabled: true
-    name: "editor"
