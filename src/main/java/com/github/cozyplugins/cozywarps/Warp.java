@@ -61,7 +61,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
         this.identifier = identifier;
         this.creatorUuid = UUID.randomUUID();
         this.managerUuid = UUID.randomUUID();
-        this.name = "null";
+        this.name = "Unnamed";
         this.material = Material.COMPASS;
     }
 
@@ -90,7 +90,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      */
     public @NotNull String getCreatorName() {
         OfflinePlayer player = Bukkit.getOfflinePlayer(this.creatorUuid);
-        if (player.getName() == null) return "Null";
+        if (player.getName() == null) return "Unknown";
         return player.getName();
     }
 
@@ -110,7 +110,7 @@ public class Warp implements ConfigurationConvertable<Warp>, Replicable<Warp>, S
      */
     public @NotNull String getManagerName() {
         OfflinePlayer player = Bukkit.getOfflinePlayer(this.managerUuid);
-        if (player.getName() == null) return "Null";
+        if (player.getName() == null) return "Unknown";
         return player.getName();
     }
 
