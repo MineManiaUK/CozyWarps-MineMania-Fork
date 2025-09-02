@@ -1,3 +1,5 @@
 # The price for each warp.
-warpcost: 1000
-maxwarps: 14
+warp:
+  1: 0
+  2: 10000
+  3: 100000

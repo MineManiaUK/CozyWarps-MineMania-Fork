@@ -97,17 +97,9 @@ public final class CozyWarps extends CozyPlugin {
             return 0;
         }
         else{
-            return this.config.getInteger("warpcost");
+            int warpNumber = getAmountOwned(player.getUniqueId());
+            return this.config.getInteger("warp." + warpNumber, -1);
         }
-    }
-
-    /**
-     * Used to get the max amount of warps per player
-     *
-     * @return The max amount of warps per player
-     */
-    public int getMaxWarps(){
-        return  this.config.getInteger("maxwarps");
     }
 
     /**
@@ -376,7 +368,7 @@ public final class CozyWarps extends CozyPlugin {
         final int cost = CozyWarps.getInstance().getPrice(user.getPlayer());
 
         // Check if the player can no longer buy any more warps.
-        if (getAmountOwned(user.getUuid()) >= getMaxWarps()) {
+        if (cost == -1) {
             user.sendMessage("&7&l> &7You already own the maximum amount of warps.");
             return;
         }
