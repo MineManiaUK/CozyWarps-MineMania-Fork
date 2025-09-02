@@ -72,7 +72,8 @@ public class WarpsInventory extends InventoryInterface implements Listener {
 
         clearPageContents();
 
-        final int cost = CozyWarps.getInstance().getPrice(player.getPlayer());
+        final int amountOfWarpsOwned = CozyWarps.getInstance().getAmountOwned(player.getUuid());
+        final int cost = CozyWarps.getInstance().getPrice(player, amountOfWarpsOwned + 1);
 
         // Create button.
         this.setItem(new InventoryItem()

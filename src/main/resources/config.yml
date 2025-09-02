@@ -1,5 +1,5 @@
 # The price for each warp.
 warp:
   1: 0
-  2: 10000
-  3: 100000
+  2: 1000
+  3: 2000

@@ -22,6 +22,7 @@ import com.github.cozyplugins.cozylibrary.CozyPlugin;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
 import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
+import com.github.cozyplugins.cozylibrary.user.User;
 import com.github.cozyplugins.cozywarps.command.WarpsCommand;
 import com.github.smuddgge.squishyconfiguration.ConfigurationFactory;
 import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
@@ -89,18 +90,14 @@ public final class CozyWarps extends CozyPlugin {
     /**
      * Used to get the price a warp would cost.
      *
+     * @param warpNumber The number warp they are buying.
      * @return The price of the warp.
      */
-    public int getPrice(Player player) {
-
-        if (player.hasPermission("cozywarps.bypass.createfee")){
-            return 0;
-        }
-        else{
-            int warpNumber = getAmountOwned(player.getUniqueId());
-            return this.config.getInteger("warp." + warpNumber, -1);
-        }
+    public int getPrice(User user, int warpNumber) {
+        if (user.hasPermission("cozywarps.bypass.createfee")) { return 0; }
+        else { return this.config.getInteger("warp." + warpNumber, -1); }
     }
+
 
     /**
      * Used to get a warp from storage given its
@@ -364,8 +361,9 @@ public final class CozyWarps extends CozyPlugin {
             return;
         }
 
-        // Get the warp cost
-        final int cost = CozyWarps.getInstance().getPrice(user.getPlayer());
+        // Get the number of warps they own.
+        final int amountOfWarpsOwned = CozyWarps.getInstance().getAmountOwned(user.getUuid());
+        final int cost = CozyWarps.getInstance().getPrice(user, amountOfWarpsOwned + 1);
 
         // Check if the player can no longer buy any more warps.
         if (cost == -1) {
