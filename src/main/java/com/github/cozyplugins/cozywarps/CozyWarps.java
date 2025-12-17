@@ -375,10 +375,12 @@ public final class CozyWarps extends CozyPlugin {
         // Get the warp cost
         final int cost = CozyWarps.getInstance().getPrice(user.getPlayer());
 
-        // Check if the player can no longer buy any more warps.
-        if (getAmountOwned(user.getUuid()) >= getMaxWarps()) {
-            user.sendMessage("&7&l> &7You already own the maximum amount of warps.");
-            return;
+        if (!user.hasPermission("cozywarps.bypass.maxlimit")) {
+            // Check if the player can no longer buy any more warps.
+            if (getAmountOwned(user.getUuid()) >= getMaxWarps()) {
+                user.sendMessage("&7&l> &7You already own the maximum amount of warps.");
+                return;
+            }
         }
 
         // Check if the player has enough money.
