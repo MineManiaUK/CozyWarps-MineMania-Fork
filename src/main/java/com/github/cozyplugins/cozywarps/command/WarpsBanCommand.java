@@ -31,6 +31,7 @@ import com.github.cozyplugins.cozywarps.CozyWarps;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,11 +71,19 @@ public class WarpsBanCommand implements CommandType {
         if (user.hasPermission("cozywarps.staff")) {
 
             return new CommandSuggestions()
-                    .append(Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).toList())
-                    .append(Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).toList());
+                    .append(
+                            Bukkit.getOnlinePlayers().stream()
+                                    .map(Player::getName)
+                                    .toList()
+                    )
+                    .append(
+                            Bukkit.getOnlinePlayers().stream()
+                                    .map(Player::getName)
+                                    .toList()
+                    );
         }
 
-        return new CommandSuggestions().append(Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).toList());
+        return null;
     }
 
     @Override
@@ -105,17 +114,6 @@ public class WarpsBanCommand implements CommandType {
             return new CommandStatus();
         }
 
-        // Check for the correct number of arguments.
-        if (arguments.getArguments().isEmpty() || arguments.getArguments().get(0).isEmpty()) {
-            user.sendMessage("&7&l> &7Please provide a name to ban from your warps.");
-            return new CommandStatus();
-        }
-
-        final String playerName = arguments.getArguments().get(1);
-        final UUID playerUuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
-
-        CozyWarps.getInstance().banPlayer(user.getUuid(), playerUuid);
-        user.sendMessage("&7&l> &7The player &f" + playerName + " &7has been banned from your warps.");
         return null;
     }
 

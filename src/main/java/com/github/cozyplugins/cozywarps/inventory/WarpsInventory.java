@@ -109,8 +109,6 @@ public class WarpsInventory extends InventoryInterface implements Listener {
                         "&a/warps &fTo list all warps.",
                         "&a/warps create <name> &fTo create a warp.",
                         "&a/warps delete <name> &fTo delete a warp.",
-                        "&a/warps ban <player> &fTo ban a player from your warps.",
-                        "&a/warps unban <player> &fTo unban a player from your warps.",
                         "&7",
                         "&c&lPlease Note: &r&7Warps belong to the community, not the creators. ",
                         "&7Server staff may change warp management",
